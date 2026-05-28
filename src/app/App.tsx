@@ -656,7 +656,7 @@ const ProjectsSection = () => {
 
       {selectedProject !== null && (
         <div
-          className="absolute inset-0 z-[60] flex items-end md:items-center md:justify-center bg-zinc-950/88 backdrop-blur-md md:bg-zinc-950/60 md:backdrop-blur-sm px-0 md:px-8"
+          className="absolute inset-0 z-[60] flex items-center justify-center bg-zinc-950/88 backdrop-blur-md md:bg-zinc-950/60 md:backdrop-blur-sm px-4 md:px-8"
           onClick={() => setSelectedProject(null)}
         >
           <motion.div
@@ -664,7 +664,7 @@ const ProjectsSection = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.28, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="w-[calc(100%-2rem)] md:w-full md:max-w-3xl max-h-[86%] md:max-h-[74%] rounded-[2rem] md:rounded-3xl bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 md:p-8 overflow-hidden mb-4 md:mb-0"
+            className="w-full md:max-w-3xl max-h-[86%] md:max-h-[74%] rounded-[2rem] md:rounded-3xl bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 md:p-8 overflow-hidden"
           >
             <div className="flex items-start justify-between gap-4 mb-5">
               <div className="min-w-0">
@@ -942,14 +942,14 @@ const ExperienceSection = () => {
       </div>
 
       {activeExperience !== null && (
-        <div className="md:hidden absolute inset-0 z-[60] flex items-end bg-zinc-950/55 backdrop-blur-sm" onClick={() => setActiveExperience(null)}>
+        <div className="md:hidden absolute inset-0 z-[60] flex items-center justify-center bg-zinc-950/55 backdrop-blur-sm px-4" onClick={() => setActiveExperience(null)}>
           <motion.div
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ duration: 0.28, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="w-[calc(100%-2rem)] max-h-[76%] rounded-[2rem] bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 pb-8 overflow-hidden mb-4"
+            className="w-full max-h-[76%] rounded-[2rem] bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 pb-8 overflow-hidden"
           >
             <div className="flex items-start justify-between gap-4 mb-5">
               <div>
