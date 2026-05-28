@@ -165,12 +165,12 @@ const Navbar = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-      className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900/80 backdrop-blur-xl border border-zinc-700/50 rounded-full px-4 md:px-6 py-2 flex items-center justify-between sm:justify-center shadow-2xl w-[92%] sm:w-auto max-w-[420px]"
+      className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900/80 backdrop-blur-xl border border-zinc-700/50 rounded-full px-4 md:px-6 h-14 md:h-auto md:py-2 flex items-center justify-between sm:justify-center gap-1 sm:gap-0 shadow-2xl w-[92%] sm:w-auto max-w-[420px]"
     >
       <a 
         href="#hero" 
         onClick={(e) => handleNavClick(e, "hero")} 
-        className={`font-black tracking-widest text-base cursor-pointer transition-all px-2 sm:pr-4 ${
+        className={`inline-flex h-8 flex-1 basis-0 min-w-0 sm:flex-none items-center justify-center font-black tracking-widest text-base leading-none cursor-pointer transition-all px-2 sm:pr-4 ${
           activeSection === "hero" 
             ? "text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" 
             : "text-zinc-400 hover:text-zinc-200"
@@ -181,13 +181,13 @@ const Navbar = () => {
       
       <div className="h-4 w-px bg-zinc-700/80 hidden sm:block mx-2"></div>
       
-      <div className="flex items-center gap-1 sm:gap-2">
+      <div className="contents sm:flex sm:flex-none sm:items-center sm:gap-2">
         {navItems.map((item) => (
           <a
             key={item.id}
             href={`#${item.id}`}
             onClick={(e) => handleNavClick(e, item.id)}
-            className={`relative px-3 sm:px-4 py-1.5 text-sm transition-all duration-300 rounded-full ${
+            className={`relative inline-flex h-8 flex-1 basis-0 min-w-0 sm:flex-none items-center justify-center px-2 sm:px-4 text-sm leading-none transition-all duration-300 rounded-full ${
               activeSection === item.id 
                 ? "text-white font-bold bg-white/10 ring-1 ring-white/20 shadow-sm" 
                 : "text-zinc-400 font-medium hover:text-zinc-200 hover:bg-zinc-800/50"
@@ -664,7 +664,7 @@ const ProjectsSection = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.28, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full md:max-w-3xl max-h-[86%] md:max-h-[74%] rounded-t-[2rem] md:rounded-3xl bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 md:p-8 overflow-hidden"
+            className="w-[calc(100%-2rem)] md:w-full md:max-w-3xl max-h-[86%] md:max-h-[74%] rounded-[2rem] md:rounded-3xl bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 md:p-8 overflow-hidden mb-4 md:mb-0"
           >
             <div className="flex items-start justify-between gap-4 mb-5">
               <div className="min-w-0">
@@ -949,7 +949,7 @@ const ExperienceSection = () => {
             exit={{ y: "100%" }}
             transition={{ duration: 0.28, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-h-[76%] rounded-t-[2rem] bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 pb-8 overflow-hidden"
+            className="w-[calc(100%-2rem)] max-h-[76%] rounded-[2rem] bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 pb-8 overflow-hidden mb-4"
           >
             <div className="flex items-start justify-between gap-4 mb-5">
               <div>
