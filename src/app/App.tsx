@@ -58,7 +58,7 @@ const SectionWrapper = ({ children, id, className = "" }: { children: React.Reac
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, margin: "-5%" }}
+        viewport={{ once: true, margin: "-5%" }}
         transition={{ duration: 0.7, ease: "easeOut" }}
         className="w-full h-full flex flex-col max-w-[1400px] mx-auto relative"
       >
@@ -93,21 +93,13 @@ const SectionHeader = ({ subtitle, title, desc = null, rightElement = null }: { 
 
 const AnimatedTitle = ({ text, className, delay = 0 }: { text: string, className: string, delay?: number }) => (
   <motion.div
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: false }}
-    variants={{ visible: { transition: { staggerChildren: 0.05, delayChildren: delay } } }}
+    initial={{ opacity: 0, y: 12 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.5, delay, ease: "easeOut" }}
     className={`text-shimmer text-center inline-block ${className}`}
   >
-    {text.split("").map((char, i) => (
-      <motion.span
-        key={i}
-        variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-        className="transition-opacity duration-300 inline-block"
-      >
-        {char === " " ? "\u00A0" : char}
-      </motion.span>
-    ))}
+    {text}
   </motion.div>
 );
 
@@ -227,7 +219,7 @@ const HeroSection = () => {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             variants={{ visible: { transition: { staggerChildren: 0.15, delayChildren: 0.8 } } }}
             className="flex flex-col items-center space-y-4 w-full mt-4 sm:mt-0"
           >
@@ -299,7 +291,7 @@ const AboutSection = () => {
           <motion.div 
             initial={{ x: 60, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="hidden lg:flex lg:col-span-5 w-full bg-zinc-900 rounded-3xl p-8 flex-col justify-between relative overflow-hidden group shadow-2xl ring-1 ring-inset ring-zinc-800 will-change-transform"
           >
@@ -323,9 +315,12 @@ const AboutSection = () => {
               <motion.div 
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false }}
+                viewport={{ once: true }}
                 variants={{ visible: { transition: { staggerChildren: 0.15, delayChildren: 0.1 } } }}
-                onScroll={(e) => setIsAboutTextScrolled(e.currentTarget.scrollTop > 6)}
+                onScroll={(e) => {
+                  const scrolled = e.currentTarget.scrollTop > 6;
+                  setIsAboutTextScrolled((current) => current === scrolled ? current : scrolled);
+                }}
                 className="space-y-4 h-full overflow-y-auto hide-scrollbar pb-10 md:pb-0"
               >
                 {[
@@ -347,7 +342,7 @@ const AboutSection = () => {
             <motion.div 
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } } }}
               className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6 lg:mt-auto pt-4 lg:pt-8 lg:h-[180px] shrink-0"
             >
@@ -510,20 +505,17 @@ const ProjectsSection = () => {
           {projects.map((project, i) => {
             const isActive = i === activeIndex;
             return (
-              <motion.div
+              <div
                 key={i}
-                onMouseEnter={() => setActiveIndex(i)}
+                onMouseEnter={() => setActiveIndex((current) => current === i ? current : i)}
                 onClick={() => {
                   setActiveIndex(i);
                   setSelectedProject(i);
                 }}
-                initial={false}
-                animate={{ flex: isActive ? 10 : 1.2 }}
-                transition={{ type: "spring", bounce: 0.5, duration: 0.9 }}
-                className={`relative cursor-pointer overflow-hidden rounded-3xl group ring-1 ring-inset
+                className={`relative cursor-pointer overflow-hidden rounded-3xl group ring-1 ring-inset transition-[flex,background-color,border-color] duration-300 ease-out
                   ${isActive 
-                    ? 'ring-zinc-600 bg-zinc-800/60' 
-                    : 'ring-zinc-800 bg-zinc-900/30 hover:bg-zinc-800/80 hover:ring-zinc-700'
+                    ? 'flex-[10] ring-zinc-600 bg-zinc-800/60' 
+                    : 'flex-[1.2] ring-zinc-800 bg-zinc-900/30 hover:bg-zinc-800/80 hover:ring-zinc-700'
                   }`}
               >
                 <div className="absolute top-[-10px] lg:top-[-20px] right-4 lg:right-[-20px] text-[4rem] lg:text-[10rem] leading-none font-black text-white/[0.03] select-none pointer-events-none">
@@ -567,7 +559,7 @@ const ProjectsSection = () => {
                     {project.title}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -593,7 +585,7 @@ const ProjectsSection = () => {
               const gap = 16;
               const cardWidthWithGap = child.offsetWidth + gap;
               const index = Math.round(target.scrollLeft / cardWidthWithGap);
-              setActiveIndex(index);
+              setActiveIndex((current) => current === index ? current : index);
             }}
           >
             {projects.map((project, i) => (
@@ -656,15 +648,15 @@ const ProjectsSection = () => {
 
       {selectedProject !== null && (
         <div
-          className="absolute inset-0 z-[60] flex items-center justify-center bg-zinc-950/88 backdrop-blur-md md:bg-zinc-950/60 md:backdrop-blur-sm px-4 md:px-8"
+          className="fixed inset-0 z-[100] flex items-end justify-center bg-zinc-950/88 backdrop-blur-md px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))] md:items-center md:bg-zinc-950/70 md:backdrop-blur-sm md:px-8 md:py-8"
           onClick={() => setSelectedProject(null)}
         >
           <motion.div
-            initial={{ opacity: 0, y: 48, scale: 0.98 }}
+            initial={{ opacity: 0, y: 56, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.28, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full md:max-w-3xl max-h-[86%] md:max-h-[74%] rounded-[2rem] md:rounded-3xl bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 md:p-8 overflow-hidden"
+            className="w-full md:max-w-3xl max-h-[calc(100dvh-2rem-env(safe-area-inset-bottom))] md:max-h-[74%] rounded-[2rem] md:rounded-3xl bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 md:p-8 overflow-hidden"
           >
             <div className="flex items-start justify-between gap-4 mb-5">
               <div className="min-w-0">
@@ -691,7 +683,7 @@ const ProjectsSection = () => {
             <div
               onWheel={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
-              className="max-h-[calc(86vh-174px)] md:max-h-[calc(74vh-210px)] overflow-y-auto overscroll-contain hide-scrollbar pr-1 [mask-image:linear-gradient(to_bottom,black_97%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_97%,transparent_100%)]"
+              className="max-h-[calc(100dvh-206px-env(safe-area-inset-bottom))] md:max-h-[calc(74vh-210px)] overflow-y-auto overscroll-contain hide-scrollbar pr-1 [mask-image:linear-gradient(to_bottom,black_97%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_97%,transparent_100%)]"
             >
               <div className="space-y-5 text-zinc-300">
                 {projectModalSections.map((sectionTitle) => {
@@ -721,6 +713,7 @@ const ProjectsSection = () => {
 
 const ExperienceSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const dragStartRef = useRef<{ x: number; scrollLeft: number } | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeExperience, setActiveExperience] = useState<number | null>(null);
   const [isMobileExperienceScrolled, setIsMobileExperienceScrolled] = useState(false);
@@ -785,11 +778,12 @@ const ExperienceSection = () => {
     const gap = window.innerWidth >= 1024 ? 32 : window.innerWidth >= 768 ? 24 : 16;
     const cardWidthWithGap = child.offsetWidth + gap;
     const index = Math.round(target.scrollLeft / cardWidthWithGap);
-    setCurrentIndex(index);
+    setCurrentIndex((current) => current === index ? current : index);
   };
 
   const handleMobileExperienceScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    setIsMobileExperienceScrolled(e.currentTarget.scrollTop > 6);
+    const scrolled = e.currentTarget.scrollTop > 6;
+    setIsMobileExperienceScrolled((current) => current === scrolled ? current : scrolled);
   };
 
   const scrollTo = (index: number) => {
@@ -800,6 +794,31 @@ const ExperienceSection = () => {
     const cardWidthWithGap = child.offsetWidth + gap;
     target.scrollTo({ left: index * cardWidthWithGap, behavior: 'smooth' });
     setCurrentIndex(index);
+  };
+
+  const handleDesktopDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!scrollRef.current) return;
+    dragStartRef.current = {
+      x: e.clientX,
+      scrollLeft: scrollRef.current.scrollLeft,
+    };
+  };
+
+  const handleDesktopDragMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!scrollRef.current || !dragStartRef.current) return;
+    const delta = e.clientX - dragStartRef.current.x;
+    scrollRef.current.scrollLeft = dragStartRef.current.scrollLeft - delta;
+  };
+
+  const handleDesktopDragEnd = () => {
+    if (!scrollRef.current || !dragStartRef.current) return;
+    const target = scrollRef.current;
+    const child = target.children[0] as HTMLElement;
+    const gap = window.innerWidth >= 1024 ? 32 : window.innerWidth >= 768 ? 24 : 16;
+    const cardWidthWithGap = child.offsetWidth + gap;
+    const index = Math.round(target.scrollLeft / cardWidthWithGap);
+    dragStartRef.current = null;
+    scrollTo(index);
   };
 
   const isFirst = currentIndex === 0;
@@ -839,7 +858,7 @@ const ExperienceSection = () => {
                   type="button"
                   initial={{ opacity: 0, x: 24 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: false }}
+                  viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: i * 0.08, ease: "easeOut" }}
                   onClick={() => setActiveExperience(i)}
                   className="relative w-full rounded-3xl bg-zinc-900 p-4 text-left ring-1 ring-inset ring-zinc-800 shadow-xl overflow-hidden flex flex-col active:scale-[0.99] transition-transform"
@@ -885,12 +904,19 @@ const ExperienceSection = () => {
           <div 
             ref={scrollRef}
             onScroll={handleScroll}
-            className="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory hide-scrollbar items-center gap-4 md:gap-6 lg:gap-8 w-full md:px-0 left-0"
+            onMouseDown={handleDesktopDragStart}
+            onMouseMove={handleDesktopDragMove}
+            onMouseUp={handleDesktopDragEnd}
+            onMouseLeave={handleDesktopDragEnd}
+            className="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory hide-scrollbar items-center gap-4 md:gap-6 lg:gap-8 w-full md:px-0 left-0 select-none"
           >
             {experiences.map((exp, i) => (
               <div 
                 key={i} 
-                className="snap-start shrink-0 w-[85%] md:w-[85%] h-full md:h-[calc(100%-2rem)] max-h-[600px] bg-zinc-900 rounded-3xl p-6 pt-8 pb-4 md:p-10 lg:p-14 flex flex-col md:flex-row ring-1 ring-inset ring-zinc-800 relative overflow-hidden shadow-xl"
+                onClick={() => scrollTo(i)}
+                className={`snap-start shrink-0 w-[85%] md:w-[85%] h-full md:h-[calc(100%-2rem)] max-h-[600px] bg-zinc-900 rounded-3xl p-6 pt-8 pb-4 md:p-10 lg:p-14 flex flex-col md:flex-row ring-1 ring-inset ring-zinc-800 relative overflow-hidden shadow-xl transition-colors duration-300 ${
+                  i === currentIndex ? "cursor-default" : "cursor-pointer hover:bg-zinc-800/80"
+                }`}
               >
               {/* Left Column */}
               <div className="md:w-[35%] lg:w-[30%] flex flex-col justify-start shrink-0 relative z-10 mb-4 md:mb-0">
@@ -913,7 +939,7 @@ const ExperienceSection = () => {
                   <ul className="space-y-4 md:space-y-6 lg:space-y-8 text-zinc-300">
                     {exp.details.map((detail, j) => (
                       <li key={j} className="flex items-start">
-                        <span className="mr-3 md:mr-4 text-zinc-600 mt-1 md:mt-1.5 text-base md:text-lg">•</span>
+                        <span className="mr-3 mt-2 h-2 w-2 rounded-full bg-zinc-500 shrink-0 shadow-[0_0_8px_rgba(161,161,170,0.35)]" />
                         <span className="leading-relaxed font-light text-sm md:text-base lg:text-lg tracking-wide">{detail}</span>
                       </li>
                     ))}
@@ -942,14 +968,14 @@ const ExperienceSection = () => {
       </div>
 
       {activeExperience !== null && (
-        <div className="md:hidden absolute inset-0 z-[60] flex items-center justify-center bg-zinc-950/55 backdrop-blur-sm px-4" onClick={() => setActiveExperience(null)}>
+        <div className="md:hidden fixed inset-0 z-[100] flex items-end justify-center bg-zinc-950/80 backdrop-blur-sm px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]" onClick={() => setActiveExperience(null)}>
           <motion.div
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ duration: 0.28, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-h-[76%] rounded-[2rem] bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 pb-8 overflow-hidden"
+            className="w-full max-h-[calc(100dvh-2rem-env(safe-area-inset-bottom))] rounded-[2rem] bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 pb-8 overflow-hidden"
           >
             <div className="flex items-start justify-between gap-4 mb-5">
               <div>
@@ -975,7 +1001,7 @@ const ExperienceSection = () => {
             <div
               onWheel={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
-              className="max-h-[calc(76vh-138px)] overflow-y-auto overscroll-contain hide-scrollbar pr-1 [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_94%,transparent_100%)]"
+              className="max-h-[calc(100dvh-170px-env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain hide-scrollbar pr-1 [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_94%,transparent_100%)]"
             >
               <ul className="space-y-4 text-zinc-300">
                 {experiences[activeExperience].details.map((detail, j) => (
