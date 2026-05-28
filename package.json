@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && node scripts/inline-build-assets.mjs",
+    "check:build": "node scripts/verify-build-output.mjs",
     "dev": "vite"
   },
   "dependencies": {
