@@ -934,8 +934,8 @@ const ExperienceSection = () => {
               </div>
 
               {/* Right List (Scrollable on internal content) */}
-              <div className="flex-1 md:w-[65%] lg:w-[70%] overflow-hidden md:border-l md:border-zinc-800 md:pl-8 lg:pl-16 relative z-10 pr-2 [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_75%,transparent_100%)] md:[mask-image:none] md:[WebkitMaskImage:none]">
-                <div className="h-full overflow-y-auto hide-scrollbar pb-16 md:pb-0">
+              <div className="flex-1 md:w-[65%] lg:w-[70%] overflow-hidden md:border-l md:border-zinc-800 md:pl-8 lg:pl-16 relative z-10 pr-2 [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_75%,transparent_100%)] md:[mask-image:linear-gradient(to_bottom,black_82%,transparent_100%)] md:[WebkitMaskImage:linear-gradient(to_bottom,black_82%,transparent_100%)]">
+                <div className="h-full overflow-y-auto hide-scrollbar pb-16 md:pb-12">
                   <ul className="space-y-4 md:space-y-6 lg:space-y-8 text-zinc-300">
                     {exp.details.map((detail, j) => (
                       <li key={j} className="flex items-start">
