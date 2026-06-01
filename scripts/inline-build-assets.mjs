@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -23,6 +23,22 @@ function escapeInlineStyle(css) {
   return css.replace(/<\/style/gi, '<\\/style');
 }
 
+function mimeTypeFor(filePath) {
+  const ext = extname(filePath).toLowerCase();
+  if (ext === '.jpg' || ext === '.jpeg') return 'image/jpeg';
+  if (ext === '.png') return 'image/png';
+  if (ext === '.webp') return 'image/webp';
+  if (ext === '.svg') return 'image/svg+xml';
+  return 'application/octet-stream';
+}
+
+function inlineAssetUrl(url) {
+  const assetPath = join(distDir, url.replace(/^\//, ''));
+  if (!existsSync(assetPath)) return url;
+  const data = readFileSync(assetPath).toString('base64');
+  return `data:${mimeTypeFor(assetPath)};base64,${data}`;
+}
+
 html = html.replace(
   /<link rel="stylesheet" crossorigin href="([^"]+)">/g,
   (_match, href) => {
@@ -40,6 +56,8 @@ html = html.replace(
     return `<script type="module">${escapeInlineScript(js)}</script>`;
   },
 );
+
+html = html.replace(/\/assets\/[^"'`\\)]+?\.(?:jpg|jpeg|png|webp|svg)/gi, (url) => inlineAssetUrl(url));
 
 writeFileSync(indexPath, html);
 console.log('Inlined build assets into dist/index.html');

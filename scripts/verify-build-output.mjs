@@ -8,7 +8,7 @@ if (!existsSync(distIndexPath)) {
 }
 
 const html = readFileSync(distIndexPath, 'utf8');
-const externalAssetPattern = /<(script|link)\b[^>]*(?:src|href)=["']\/?assets\//;
+const externalAssetPattern = /\/assets\//;
 
 if (externalAssetPattern.test(html)) {
   throw new Error('dist/index.html still depends on external /assets files.');

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { ChevronDown, Mail, MessageCircle, FileText, ArrowUpRight, Database, Box, Layers, BrainCircuit, Activity, Network, ChevronLeft, ChevronRight, BookOpen, X } from "lucide-react";
+import profilePhoto from "../imports/profile-photo-data";
 
 // ---------------------------------------------------------
 // Global Styles
@@ -168,7 +169,7 @@ const Navbar = () => {
             : "text-zinc-400 hover:text-zinc-200"
         }`}
       >
-        DCZ.
+        DSM.
       </a>
       
       <div className="h-4 w-px bg-zinc-700/80 hidden sm:block mx-2"></div>
@@ -204,16 +205,16 @@ const HeroSection = () => {
         <div className="max-w-5xl w-full flex flex-col items-center space-y-8">
           <div className="hidden md:block w-full">
             <AnimatedTitle 
-              text="DACHENGZI" 
+              text="DENGSHUMING" 
               className="text-6xl md:text-8xl lg:text-[9rem] font-black tracking-tighter uppercase inline-block" 
               delay={0}
             />
           </div>
           {/* Mobile multiline title */}
           <div className="md:hidden flex flex-col items-center space-y-0 w-full">
-            <span className="text-shimmer inline-block text-[18vw] leading-[0.95] font-black tracking-tighter uppercase text-white">DA</span>
-            <span className="text-shimmer inline-block text-[18vw] leading-[0.95] font-black tracking-tighter uppercase text-white">CHENG</span>
-            <span className="text-shimmer inline-block text-[18vw] leading-[0.95] font-black tracking-tighter uppercase text-white">ZI</span>
+            <span className="text-shimmer inline-block text-[16vw] leading-[0.95] font-black tracking-tighter uppercase text-white">DENG</span>
+            <span className="text-shimmer inline-block text-[16vw] leading-[0.95] font-black tracking-tighter uppercase text-white">SHU</span>
+            <span className="text-shimmer inline-block text-[16vw] leading-[0.95] font-black tracking-tighter uppercase text-white">MING</span>
           </div>
           
           <motion.div
@@ -228,7 +229,7 @@ const HeroSection = () => {
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="hidden md:flex text-lg md:text-2xl lg:text-3xl font-medium tracking-wide w-full justify-center"
             >
-              <span className="text-shimmer inline-block">专注大模型数据构建 · 标注规则设计 · 质检流程优化</span>
+              <span className="text-shimmer inline-block">AI项目经理助理 · 数据规则设计 · 模型落地执行</span>
             </motion.div>
             
             {/* Mobile Stacked Subtitles (One per line) */}
@@ -236,25 +237,25 @@ const HeroSection = () => {
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="md:hidden flex flex-col items-center space-y-3 w-full mt-2"
             >
-              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">• 专注大模型数据构建</span>
-              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">• 标注规则设计</span>
-              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">• 质检流程优化</span>
+              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">• AI项目经理助理</span>
+              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">• 数据规则设计</span>
+              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">• 模型落地执行</span>
             </motion.div>
 
             <motion.div
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="hidden md:block text-xs md:text-sm lg:text-lg font-mono tracking-widest uppercase w-full text-zinc-400 mt-4"
             >
-              RAG数据构建 / Agent SFT标注 / 多模态图文质检
+              RAG知识库 / SFT问答样本 / 多模态PO识别
             </motion.div>
 
             <motion.div
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="md:hidden flex flex-col items-center space-y-3 mt-6 text-xs font-mono tracking-widest uppercase text-zinc-400"
             >
-              <span className="px-4 py-1.5 bg-zinc-900 rounded-full border border-zinc-800">RAG数据构建</span>
-              <span className="px-4 py-1.5 bg-zinc-900 rounded-full border border-zinc-800">Agent SFT标注</span>
-              <span className="px-4 py-1.5 bg-zinc-900 rounded-full border border-zinc-800">多模态图文质检</span>
+              <span className="px-4 py-1.5 bg-zinc-900 rounded-full border border-zinc-800">RAG知识库</span>
+              <span className="px-4 py-1.5 bg-zinc-900 rounded-full border border-zinc-800">SFT问答样本</span>
+              <span className="px-4 py-1.5 bg-zinc-900 rounded-full border border-zinc-800">多模态PO识别</span>
             </motion.div>
           </motion.div>
         </div>
@@ -273,10 +274,8 @@ const AboutSection = () => {
   const [isAboutTextScrolled, setIsAboutTextScrolled] = useState(false);
 
   const mobileDCard = (
-    <div className="md:hidden w-16 h-16 bg-zinc-900 rounded-2xl flex flex-col items-center justify-center ring-1 ring-inset ring-zinc-800 shrink-0 shadow-lg relative overflow-hidden group">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-50" />
-      <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-zinc-600 to-zinc-800 leading-none relative z-10 -mt-1">D</span>
-      <span className="text-[8px] tracking-widest text-zinc-500 uppercase font-mono mt-0.5 relative z-10 leading-none">DCZ</span>
+    <div className="md:hidden w-16 h-16 bg-zinc-900 rounded-2xl ring-1 ring-inset ring-zinc-800 shrink-0 shadow-lg relative overflow-hidden">
+      <img src={profilePhoto} alt="邓述明头像" className="h-full w-full object-cover object-[50%_18%]" />
     </div>
   );
 
@@ -295,12 +294,12 @@ const AboutSection = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="hidden lg:flex lg:col-span-5 w-full bg-zinc-900 rounded-3xl p-8 flex-col justify-between relative overflow-hidden group shadow-2xl ring-1 ring-inset ring-zinc-800 will-change-transform"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            <div className="relative z-10 flex-1 flex items-center justify-center">
-              <span className="text-[12rem] leading-none font-black text-transparent bg-clip-text bg-gradient-to-b from-zinc-700 to-zinc-900 drop-shadow-sm group-hover:from-zinc-500 group-hover:to-zinc-800 transition-all duration-700">D</span>
+            <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 to-zinc-950 opacity-80" />
+            <div className="relative z-10 flex-1 min-h-0 rounded-[1.5rem] overflow-hidden ring-1 ring-inset ring-zinc-800 bg-zinc-950">
+              <img src={profilePhoto} alt="邓述明头像" className="h-full w-full object-cover object-[50%_18%] grayscale-[15%] transition duration-700 group-hover:grayscale-0 group-hover:scale-[1.03]" />
             </div>
             <div className="relative z-10 text-sm tracking-widest text-zinc-500 uppercase font-mono text-center">
-              DACHENGZI
+              DENG SHUMING
             </div>
           </motion.div>
 
@@ -324,9 +323,9 @@ const AboutSection = () => {
                 className="space-y-4 h-full overflow-y-auto hide-scrollbar pb-10 md:pb-0"
               >
                 {[
-                  "我是一名专注AI数据构建的训练师，致力于为大语言模型和多模态模型提供高质量的数据养料。拥有丰富的数据标注、规则制定和质检流程优化经验。",
-                  "在AI行业的发展浪潮中，我坚信“好的数据决定了模型的上限”。我擅长将复杂业务场景拆解为清晰的数据标注SOP，并通过精细化质检把控数据质量。",
-                  "拥有UI设计与AI数据双重背景，使我不仅能关注数据逻辑，还能从产品体验的角度优化数据结构和Agent交互链路。"
+                  "我是一名具备AI数据项目执行经验的AI项目经理助理，参与过客服意图识别、RAG知识库、SFT问答样本、多模态PO识别等项目。",
+                  "我擅长把售前/售后分流、售后知识问答、订单字段校验等业务问题，转化为可标注、可评测、可交付的数据任务。",
+                  "过往UI设计背景让我更理解产品流程、用户体验和业务逻辑，能在产品、算法、客服、销售之间推动AI数据项目落地。"
                 ].map((text, i) => (
                   <motion.p 
                     key={i}
@@ -347,9 +346,9 @@ const AboutSection = () => {
               className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6 lg:mt-auto pt-4 lg:pt-8 lg:h-[180px] shrink-0"
             >
               {[
-                { label: "AI行业经验", value: "2YRS+", icon: Activity },
-                { label: "数据类型", value: "4TYPES", icon: Database },
-                { label: "能力覆盖", value: "全流程", icon: Network },
+                { label: "AI项目经验", value: "2YRS+", icon: Activity },
+                { label: "PO结构化样本", value: "3500+", icon: Database },
+                { label: "知识库条目", value: "4800+", icon: Network },
                 { label: "复合背景", value: "UI+AI", icon: Layers }
               ].map((stat, i) => (
                 <motion.div 
@@ -375,7 +374,7 @@ const ProjectsSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const projectModalSections = ["项目背景", "我的角色", "核心价值"];
+  const projectModalSections = ["项目背景", "我的角色", "核心价值", "我的任务", "项目成果"];
 
   useEffect(() => {
     const sectionEl = document.getElementById("projects");
@@ -418,74 +417,62 @@ const ProjectsSection = () => {
 
   const projects = [
     {
-      title: "企业研发知识库RAG",
-      type: "RAG 数据",
-      scale: "10万+条 / 3个月",
-      desc: "针对企业内部技术文档，构建高质量的问答对数据，优化检索增强生成效果，提升知识库回答准确率。",
-      tags: ["文档切片", "QA生成", "相关性标注", "事实性检查"],
+      title: "海外客户PO识别",
+      type: "多模态 文档",
+      scale: "3500条 / 6个月",
+      desc: "围绕海外客户PO采购单，构建页面图像、OCR文本、OA字段与人工标准输出的结构化数据，用于订单字段抽取和一致性校验。",
+      tags: ["OCR文本", "字段抽取", "OA校验", "bad case复盘"],
       detailSections: [
-        { title: "核心价值", items: ["把分散研发文档转化为可检索、可追溯、可质检的知识库数据。"] },
-        { title: "我的角色", items: ["需求承接｜规则制定｜入库标准设计｜问答质检｜bad case归因"] },
-        { title: "项目背景", items: ["企业研发文档分散在PDM、DTS等多个系统，一线员工查询成本高，模型回答经常脱离文档、依赖常识生成错误答案。"] },
-        { title: "我的任务", items: ["从0到1制定数据清洗、Chunk切分、入库标准和问答质检规则，覆盖6类数据源。"] },
-        { title: "关键难点", items: ["文档格式不统一（PDF/Word/PPT混杂）、术语密集、不同系统更新频率不一致，固定字数切分容易破坏语义完整性。"] },
-        { title: "解决方法", items: ["按文档类型制定差异化切分策略：结构化文档按标题层级切，PPT/PDF按页切。", "补充来源、版本、适用范围等元数据字段。", "Chunk从完整性、准确性、唯一性、有效性、一致性五个维度评分，低于3分不入库。"] },
-        { title: "主要bad case", items: ["召回文档与问题无关。", "回答脱离文档凭常识生成。", "Chunk边界切断关键语义。"] },
-        { title: "我的产出", items: ["数据清洗规范、分类入库模板、Chunk质检评分表、问答质检规则、bad case归因复盘文档。"] }
-      ],
-      icon: Database
-    },
-    {
-      title: "多模态图像数据标注",
-      type: "多模态 图文",
-      scale: "50万+张 / 6个月",
-      desc: "负责复杂场景下的图像描述、目标检测及图文对齐标注，制定多模态质检SOP，显著降低数据废品率。",
-      tags: ["图文匹配", "细粒度描述", "边界框标注", "质量抽检"],
-      detailSections: [
-        { title: "核心价值", items: ["把设计经验拆成非设计背景标注员也能执行的图像判断规则。"] },
-        { title: "我的角色", items: ["规则制定｜图例对照表设计｜标注培训｜质检抽检｜bad case归类"] },
-        { title: "项目背景", items: ["多模态模型对图片内容、视觉风格、用户文本需求的理解能力不足，需要构建高质量图文对齐数据。"] },
-        { title: "我的任务", items: ["制定图像质量筛选标准、图文一致性标注规则，组织标注团队完成数据生产。"] },
-        { title: "关键难点", items: ["标注人员普遍没有设计背景，无法准确判断镜头类型、光影方向、构图方式、色调风格等专业视觉维度，标注一致性低。"] },
-        { title: "解决方法", items: ["基于UI设计经验将视觉判断拆解为可操作规则，为每个视觉维度制作图例对照表并配置正反例图片。", "按场景类型（电商/海报/生活/产品）制定差异化判断标准。", "含水印图片设为前置过滤规则。"] },
-        { title: "主要bad case", items: ["图文描述对不上。", "含水印图片混入。", "视觉风格判断不一致。", "场景类型错标。"] },
-        { title: "我的产出", items: ["视觉维度判断图例对照表、场景类型定义文档、图文一致性标注规则、bad case分类归因表。"] }
+        { title: "核心价值", items: ["把格式不统一的海外客户PO转成可抽取、可校验、可评测的结构化样本，辅助销售、商务、财务提前发现错填、漏填和冲突字段。"] },
+        { title: "我的角色", items: ["范围收敛｜字段清单设计｜标注格式制定｜一致性判断｜bad case复盘"] },
+        { title: "项目背景", items: ["新能源储能产品采用海外B2B销售模式，销售需根据客户PO在OA/ERP中创建内部销售订单；客户PO格式不统一，型号、币种、金额等字段容易录入出错。"] },
+        { title: "我的任务", items: ["收敛一期范围，聚焦客户PO采购单，支持PDF和扫描图片两类输入。", "设计客户名称、PO编号、产品型号、数量、币种、金额、交付国家等字段抽取清单。", "制定“PO页面图像/OCR文本 + OA订单字段 + 人工结构化输出”的数据格式。"] },
+        { title: "项目成果", items: ["构建客户PO采购单多模态结构化样本约3,500条。", "基于500条人工评测集验证，关键字段抽取准确率达到88%，OA字段一致性判断准确率达到86%。"] }
       ],
       icon: Box
     },
     {
-      title: "Agent会议室助手标注",
-      type: "Agent SFT",
-      scale: "5万+对话 / 2个月",
-      desc: "设计复杂多轮对话场景，训练Agent调用API预定会议室、查询日程，构建高阶思维链(CoT)数据。",
-      tags: ["Function Calling", "多轮对话", "思维链(CoT)", "意图识别"],
+      title: "APP智能客服RAG+SFT",
+      type: "RAG + SFT",
+      scale: "4800条 / 18个月",
+      desc: "将售后FAQ、产品手册和视频转写文本整理为智能客服知识库，并设计SFT问答样本生产规范，提升售后问题检索与回答质量。",
+      tags: ["知识清洗", "Chunk分类", "术语表", "回答改写"],
       detailSections: [
-        { title: "核心价值", items: ["把模糊工具调用过程拆成可标注、可检查的Think/Action链路。"] },
-        { title: "我的角色", items: ["规则制定｜工具清单设计｜标注培训｜质检抽检｜QA文档沉淀"] },
-        { title: "项目背景", items: ["用户输入模糊指令时，模型不会合理拆解任务步骤，工具调用逻辑混乱，无法稳定完成会议室预订、查询、取消等操作。"] },
-        { title: "我的任务", items: ["为Agent SFT数据构建制定标注规则，覆盖Think链路、Tool Call、Observation、Final Answer四个环节的判断标准。"] },
-        { title: "关键难点", items: ["Think链路质量难以量化，标注人员对“合理推理”判断标准容易不一致。", "工具参数边界模糊，容易出现似对非对的错误调用。"] },
-        { title: "解决方法", items: ["将Think链路拆分为“是否识别用户意图、是否规划了正确工具、是否考虑约束条件”三个判断维度分别打标。", "制定工具触发条件表，明确每个工具的适用场景和必填参数。"] },
-        { title: "主要bad case", items: ["Think重复冗余：思考链路反复重申同一句话，无逻辑推进。", "工具调错：意图明确但调用了错误工具接口。"] },
-        { title: "我的产出", items: ["工具清单及触发条件表、Think/Action双维度标注规则、bad case归因分类表、QA文档。"] }
+        { title: "核心价值", items: ["把分散的售后知识转化为稳定、可检索、可用于SFT生产的垂直知识库数据。"] },
+        { title: "我的角色", items: ["入库边界制定｜资料清洗切块｜知识目录搭建｜SFT样本规范｜幻觉回答控制"] },
+        { title: "项目背景", items: ["公司原有售后FAQ、产品手册、操作视频文本等知识分散，用户难以快速找到对应说明，智能客服需要作为APP帮助体系的自然语言入口。"] },
+        { title: "我的任务", items: ["制定知识库入库边界，将配网步骤、设备添加/解绑流程、设备离线排查SOP等稳定知识纳入知识库。", "清洗售后FAQ、产品手册、操作视频转写文本，建立设备操作知识目录，并整理多语言术语对照表。", "设计SFT阶段样本生产规范，制定候选回答选择和改写规则。"] },
+        { title: "项目成果", items: ["构建多语言垂直知识库约4,800条。", "建立新能源领域术语对照表720条。", "基于300条评测集，RAG Top-3检索命中率由72%提升至86%。"] }
+      ],
+      icon: Database
+    },
+    {
+      title: "客服消息意图识别",
+      type: "NLP 分类",
+      scale: "3000条 / 4个月",
+      desc: "基于历史客服消息、销售咨询记录和售后FAQ，构建售前、售后、意图不明确三类意图体系，减少人工首轮分拣成本。",
+      tags: ["意图体系", "边界样本", "分流规则", "试标抽检"],
+      detailSections: [
+        { title: "核心价值", items: ["把用户消息转成可分流、可训练、可评测的意图识别数据，降低售前售后首轮分拣压力。"] },
+        { title: "我的角色", items: ["意图体系设计｜分流规则制定｜边界样本补充｜训练样本构建｜bad case复盘"] },
+        { title: "项目背景", items: ["项目基于本地部署模型验证客服消息意图识别能力，将用户消息分为售前、售后、意图不明确三类，分别流转至销售、售后或人工判断。"] },
+        { title: "我的任务", items: ["设计售前、售后、意图不明确三类一级意图体系。", "制定“售前→销售团队、售后→售后团队、意图不明确→人工判断”的分流规则。", "补充短句模糊、售前售后混合表达等边界样本，组织试标、抽检和规则优化。"] },
+        { title: "项目成果", items: ["构建意图识别训练及评测样本约3,000条。", "沉淀售前/售后边界规则、人工判断标准和bad case复盘表。"] }
       ],
       icon: BrainCircuit
     },
     {
-      title: "长文本切片与意图分级",
-      type: "NLP 文本",
-      scale: "20万+段 / 4个月",
-      desc: "对海量真实销售录音转文本数据进行长文切片、情感分析与意图分级，辅助销售话术模型微调。",
-      tags: ["长文理解", "情感分析", "语义分块", "实体抽取"],
+      title: "工具类APP与B端后台",
+      type: "UI 设计",
+      scale: "2021-2024",
+      desc: "负责工具类APP、小程序、WEB后台及B端销售后台界面设计与交互优化，沉淀基础视觉规范并推动开发落地。",
+      tags: ["B端后台", "交互梳理", "视觉规范", "UI走查"],
       detailSections: [
-        { title: "核心价值", items: ["把长销售对话拆成模型可处理的短片段，并建立意图分级边界。"] },
-        { title: "我的角色", items: ["切片规则设计｜意图分级标准制定｜试标｜质检复盘"] },
-        { title: "项目背景", items: ["销售大模型需要根据对话录音判断客户购买意图强弱，但原始数据为长录音，模型单次输入有字数限制。"] },
-        { title: "我的任务", items: ["设计意图强弱判断规则，并解决录音转文本后的切片问题。"] },
-        { title: "关键难点", items: ["单条录音30-60分钟，转文本后远超模型2500字输入上限。", "强/中/弱意图的边界判断容易产生歧义。"] },
-        { title: "解决方法", items: ["将录音转文本后按上下文连贯原则切分为不超过2500字的片段。", "制定三级意图判断规则：强意图为明确询问价格/确认信息，中意图为未明确拒绝也未明确答应，弱意图为直接拒绝。"] },
-        { title: "主要bad case", items: ["切片边界破坏对话上下文导致意图判断失准。", "强弱意图边界模糊案例归类不一致。"] },
-        { title: "我的产出", items: ["录音切片规则、三级意图判断标准、正反例样本库、bad case归因文档。"] }
+        { title: "核心价值", items: ["UI设计经历补足了我对产品流程、业务逻辑和用户体验的理解，也让后续AI数据项目更容易和产品侧对齐。"] },
+        { title: "我的角色", items: ["需求沟通｜竞品分析｜流程梳理｜高保真设计｜切图标注｜UI走查"] },
+        { title: "项目背景", items: ["公司需要持续迭代自研APP、小程序、WEB后台及B端销售后台，提升业务流程效率和界面一致性。"] },
+        { title: "我的任务", items: ["与产品经理进行项目初期产品设定讨论，并研究B端用户体验。", "参考Ant Design进行页面设计并输出后台视觉规范，同步开发人员降低开发成本。", "系统梳理页面之间的交互逻辑并优化用户体验。"] },
+        { title: "项目成果", items: ["完成多端界面设计与交互优化，配合产品、开发、测试推进页面落地。", "沉淀基础视觉规范，为后续跨部门协作提供统一设计依据。"] }
       ],
       icon: Layers
     }
@@ -497,7 +484,7 @@ const ProjectsSection = () => {
         <SectionHeader 
           subtitle="Projects" 
           title="项目经历" 
-          desc="聚焦于大模型落地场景的核心数据构建，通过高质量数据提升模型表现。" 
+          desc="围绕新能源业务场景，覆盖多模态识别、RAG知识库、SFT样本与客服意图分流。" 
         />
 
         {/* Desktop Accordion */}
@@ -720,39 +707,39 @@ const ExperienceSection = () => {
 
   const experiences = [
     {
-      period: "2024.06 至今",
-      company: "深圳某AI数据服务公司",
-      role: "AI数据训练师",
-      tags: ["SFT", "RLHF", "质检", "Prompt"],
+      period: "2024.03 - 2026.06",
+      company: "深圳益邦阳光有限公司",
+      role: "AI项目经理助理",
+      tags: ["RAG", "SFT", "多模态", "质检"],
       details: [
-        "负责主导多个大语言模型（LLM）的SFT及RLHF数据构建与标注任务分配。",
-        "参与制定复杂场景的数据标注SOP，规范化标注流程，提升团队整体产出效率。",
-        "搭建数据质检体系，通过多轮交叉抽检将数据准确率稳定维持在98%以上。",
-        "与算法工程师深度协作，根据模型测试反馈，持续优化迭代Prompt规则库。"
+        "参与新能源储能业务AI项目落地，覆盖客服消息分流、售后RAG知识库、SFT问答样本、多模态PO识别等方向。",
+        "负责需求拆解、规则制定、样本构建、标注质检与bad case复盘，推动数据任务可标注、可评测、可交付。",
+        "对接产品、算法、客服、销售等角色，将售前/售后分流、售后问答、订单字段校验等业务问题转化为数据任务。",
+        "基于评测结果持续优化字段抽取、知识检索、候选回答改写和分流规则，推动模型在垂直业务场景中落地。"
       ]
     },
     {
-      period: "2020.11 - 2024.05",
-      company: "上海某互联网产品公司",
+      period: "2021.03 - 2024.03",
+      company: "上海知渔信息科技有限公司",
       role: "UI设计师",
-      tags: ["规范", "B端", "增长", "转化"],
+      tags: ["APP", "小程序", "WEB后台", "B端"],
       details: [
-        "负责公司核心App的视觉规范（Design System）搭建与全面UI升级迭代。",
-        "主导多个从0到1的创新产品设计，涵盖B端后台管理系统与C端增长活动页面。",
-        "优化核心业务转化漏斗链路，通过A/B测试设计方案使支付转化率提升15%。",
-        "具备跨部门协作经验，有效推动设计落地，确保开发实现与设计稿的高还原度。"
+        "负责公司自研APP、小程序、WEB后台及B端销售后台的界面设计与交互优化。",
+        "参与需求沟通、竞品分析、页面流程梳理、高保真设计、切图标注和UI走查。",
+        "参考Ant Design输出后台视觉规范，和开发同步设计规则，降低页面实现与维护成本。",
+        "配合产品、开发、测试完成页面落地，并沉淀基础视觉规范和交互梳理经验。"
       ]
     },
     {
-      period: "2021 - 2024",
-      company: "天津大学",
-      role: "学生",
-      tags: ["CS", "数据结构", "算法", "人机交互"],
+      period: "本科",
+      company: "计算机与产品体验复合背景",
+      role: "教育背景",
+      tags: ["业务理解", "流程梳理", "数据任务", "协作"],
       details: [
-        "系统学习计算机科学基础课程，覆盖数据结构、算法设计、操作系统与数据库原理等核心方向。",
-        "完成面向真实业务场景的课程项目练习，理解从需求拆解、数据建模到功能实现的完整过程。",
-        "持续关注人工智能与人机交互方向，积累将技术逻辑转化为产品体验的基础能力。",
-        "参与团队协作式项目训练，熟悉文档沉淀、任务拆分与阶段性复盘。"
+        "具备本科教育背景，长期围绕产品流程、用户体验和业务逻辑进行项目实践。",
+        "从UI设计转向AI数据项目执行后，能更快理解产品需求、算法约束和业务交付边界。",
+        "熟悉文档沉淀、任务拆分、规则制定和阶段性复盘，适合承担AI数据项目的执行与协调工作。",
+        "能够把跨部门沟通内容整理成清晰的标注规则、评测口径和交付标准。"
       ]
     }
   ];
@@ -830,7 +817,7 @@ const ExperienceSection = () => {
         <SectionHeader 
           subtitle="Experience" 
           title="工作经历" 
-          desc="沉淀于核心业务场景，持续推动设计与数据的质量飞跃。" 
+          desc="从UI设计到AI数据项目执行，持续沉淀业务拆解、规则制定与跨部门协作能力。" 
         />
 
         <div
@@ -934,8 +921,8 @@ const ExperienceSection = () => {
               </div>
 
               {/* Right List (Scrollable on internal content) */}
-              <div className="flex-1 md:w-[65%] lg:w-[70%] overflow-hidden md:border-l md:border-zinc-800 md:pl-8 lg:pl-16 relative z-10 pr-2 [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_75%,transparent_100%)] md:[mask-image:linear-gradient(to_bottom,black_82%,transparent_100%)] md:[WebkitMaskImage:linear-gradient(to_bottom,black_82%,transparent_100%)]">
-                <div className="h-full overflow-y-auto hide-scrollbar pb-16 md:pb-12">
+              <div className="flex-1 md:w-[65%] lg:w-[70%] overflow-hidden md:border-l md:border-zinc-800 md:pl-8 lg:pl-16 relative z-10 pr-2 [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_75%,transparent_100%)] md:[mask-image:none] md:[WebkitMaskImage:none]">
+                <div className="h-full overflow-y-auto hide-scrollbar pb-16 md:pb-0">
                   <ul className="space-y-4 md:space-y-6 lg:space-y-8 text-zinc-300">
                     {exp.details.map((detail, j) => (
                       <li key={j} className="flex items-start">
@@ -1021,10 +1008,10 @@ const ExperienceSection = () => {
 
 const ContactSection = () => {
   const contacts = [
-    { label: "邮箱", value: "hello@dachengzi.ai", icon: Mail },
-    { label: "微信", value: "dachengzi_ai", icon: MessageCircle },
-    { label: "文章", value: "阅读技术博客", icon: BookOpen },
-    { label: "简历", value: "获取完整PDF", icon: FileText }
+    { label: "邮箱", value: "hi@dengshuming.com", icon: Mail },
+    { label: "电话", value: "153-0790-1581", icon: MessageCircle },
+    { label: "定位", value: "AI项目经理助理", icon: BookOpen },
+    { label: "简历", value: "AI训练师 / 数据项目执行", icon: FileText }
   ];
 
   return (
@@ -1033,7 +1020,7 @@ const ContactSection = () => {
         <SectionHeader 
           subtitle="Contact" 
           title="联系我" 
-          desc="期待与您共同探索 AI 数据构建的无限可能" 
+          desc="可承接AI数据项目执行、RAG知识库、SFT样本构建与多模态文档识别相关工作" 
         />
 
         <div className="flex-1 min-h-0 w-full relative flex flex-col justify-start pb-0 md:pb-16">
