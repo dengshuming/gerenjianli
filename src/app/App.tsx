@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
-import { ChevronDown, Mail, MessageCircle, FileText, ArrowUpRight, Database, Box, Layers, BrainCircuit, Activity, Network, ChevronLeft, ChevronRight, BookOpen, X } from "lucide-react";
+import { ChevronDown, Mail, FileText, ArrowUpRight, Database, Box, Layers, BrainCircuit, Activity, Network, ChevronLeft, ChevronRight, X, Phone, Globe } from "lucide-react";
 import profilePhoto from "../imports/profile-photo-data";
 
 // ---------------------------------------------------------
@@ -72,20 +72,24 @@ const SectionWrapper = ({ children, id, className = "" }: { children: React.Reac
 // Unified Standardized Header for All Sections
 // Aligned Left on Mobile, Centered on Desktop
 const SectionHeader = ({ subtitle, title, desc = null, rightElement = null }: { subtitle: string, title: string, desc?: string | null, rightElement?: React.ReactNode }) => (
-  <div className="w-full mb-6 md:mb-10 flex flex-col items-start md:items-center md:text-center shrink-0">
-    <div className="flex items-center gap-3 md:gap-4 mb-1 md:mb-4 w-full md:w-auto">
+  <div className="w-full mb-[28px] md:mb-10 flex flex-col items-start md:items-center md:text-center shrink-0">
+    <div className="flex items-center gap-3 md:gap-4 mb-[4px] md:mb-4 w-full md:w-auto">
       <div className="hidden md:block h-[1px] w-8 lg:w-12 bg-zinc-700" />
       <span className="text-sm font-mono text-zinc-400 tracking-widest uppercase">{subtitle}</span>
       <div className="h-[1px] w-8 lg:w-12 bg-zinc-700" />
     </div>
-    <div className="flex items-center justify-between w-full md:w-auto md:justify-center gap-4 mb-2 md:mb-4">
+    <div className="relative flex items-center justify-start w-full md:w-auto md:justify-center gap-4 mb-[12px] md:mb-4">
       <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white text-left md:text-center leading-none py-1">
         {title}
       </h2>
-      {rightElement}
+      {rightElement && (
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 md:static md:translate-y-0">
+          {rightElement}
+        </div>
+      )}
     </div>
     {desc && (
-      <p className="text-zinc-400 text-sm md:text-base lg:text-lg font-light text-left md:text-center w-full md:whitespace-nowrap md:truncate">
+      <p className="text-zinc-400 text-sm md:text-base lg:text-lg font-light leading-relaxed text-left md:text-center w-full md:whitespace-nowrap md:truncate">
         {desc}
       </p>
     )}
@@ -323,9 +327,9 @@ const AboutSection = () => {
                 className="space-y-4 h-full overflow-y-auto hide-scrollbar pb-10 md:pb-0"
               >
                 {[
-                  "我是一名具备AI数据项目执行经验的AI项目经理助理，参与过客服意图识别、RAG知识库、SFT问答样本、多模态PO识别等项目。",
-                  "我擅长把售前/售后分流、售后知识问答、订单字段校验等业务问题，转化为可标注、可评测、可交付的数据任务。",
-                  "过往UI设计背景让我更理解产品流程、用户体验和业务逻辑，能在产品、算法、客服、销售之间推动AI数据项目落地。"
+                  "AI数据项目推进能力：具备从需求理解、规则制定、样本构建到质检复盘的数据项目执行经验，能够在多环节协作中保持交付节奏和数据质量。",
+                  "业务拆解与规则沉淀能力：能够将复杂需求拆解为清晰的数据任务，形成可执行、可复用的标注规则和质检标准，帮助团队降低沟通成本并提升执行一致性。",
+                  "产品视角与协作沟通能力：具备UI设计背景，理解用户体验、页面流程和业务逻辑，能够在产品、算法、业务等多方之间准确对齐需求，推动问题闭环。"
                 ].map((text, i) => (
                   <motion.p 
                     key={i}
@@ -347,8 +351,8 @@ const AboutSection = () => {
             >
               {[
                 { label: "AI项目经验", value: "2YRS+", icon: Activity },
-                { label: "PO结构化样本", value: "3500+", icon: Database },
-                { label: "知识库条目", value: "4800+", icon: Network },
+                { label: "数据样本规模", value: "1W+", icon: Database },
+                { label: "落地项目", value: "3项", icon: Network },
                 { label: "复合背景", value: "UI+AI", icon: Layers }
               ].map((stat, i) => (
                 <motion.div 
@@ -374,7 +378,7 @@ const ProjectsSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const projectModalSections = ["项目背景", "我的角色", "核心价值", "我的任务", "项目成果"];
+  const projectModalSections = ["项目背景", "我的角色", "核心价值"];
 
   useEffect(() => {
     const sectionEl = document.getElementById("projects");
@@ -417,64 +421,43 @@ const ProjectsSection = () => {
 
   const projects = [
     {
-      title: "海外客户PO识别",
-      type: "多模态 文档",
-      scale: "3500条 / 6个月",
-      desc: "围绕海外客户PO采购单，构建页面图像、OCR文本、OA字段与人工标准输出的结构化数据，用于订单字段抽取和一致性校验。",
-      tags: ["OCR文本", "字段抽取", "OA校验", "bad case复盘"],
+      title: "PO文档理解与字段提取",
+      type: "多模态 PO",
+      scale: "2025.04 - 2026.06",
+      desc: "围绕海外客户PO图片和PDF，建设多模态字段抽取与结构化输出数据，提升订单关键信息识别稳定性。",
+      tags: ["文档理解", "字段提取", "格式统一", "bad case"],
       detailSections: [
-        { title: "核心价值", items: ["把格式不统一的海外客户PO转成可抽取、可校验、可评测的结构化样本，辅助销售、商务、财务提前发现错填、漏填和冲突字段。"] },
-        { title: "我的角色", items: ["范围收敛｜字段清单设计｜标注格式制定｜一致性判断｜bad case复盘"] },
-        { title: "项目背景", items: ["新能源储能产品采用海外B2B销售模式，销售需根据客户PO在OA/ERP中创建内部销售订单；客户PO格式不统一，型号、币种、金额等字段容易录入出错。"] },
-        { title: "我的任务", items: ["收敛一期范围，聚焦客户PO采购单，支持PDF和扫描图片两类输入。", "设计客户名称、PO编号、产品型号、数量、币种、金额、交付国家等字段抽取清单。", "制定“PO页面图像/OCR文本 + OA订单字段 + 人工结构化输出”的数据格式。"] },
-        { title: "项目成果", items: ["构建客户PO采购单多模态结构化样本约3,500条。", "基于500条人工评测集验证，关键字段抽取准确率达到88%，OA字段一致性判断准确率达到86%。"] }
+        { title: "项目背景", items: ["公司海外B2B订单流程中，客户PO采购单存在图片和PDF等不同形式，不同客户的文件版式、字段位置和表达方式不统一，人工识别订单关键信息时容易出现型号漏看、金额格式混乱、币种识别错误等问题。项目围绕客户PO文件构建多模态字段抽取和结构化输出数据，使模型能够从PO图片和PDF中稳定提取客户名称、PO编号、产品型号、数量、币种、金额、交付国家、下单日期等关键字段，并按照统一格式输出。"] },
+        { title: "我的角色", items: ["数据流程设计｜字段规则制定｜标注验收把控｜质检与返修跟进｜bad case复盘"] },
+        { title: "核心价值", items: ["基于500条固定人工评测集验证，模型关键字段抽取准确率由初版约74%提升至88%，重点覆盖产品型号、数量、币种、金额等高风险字段。", "通过字段格式统一规则和结构化输出规范优化，结构化输出格式合规率达到92%。"] }
       ],
       icon: Box
     },
     {
       title: "APP智能客服RAG+SFT",
       type: "RAG + SFT",
-      scale: "4800条 / 18个月",
-      desc: "将售后FAQ、产品手册和视频转写文本整理为智能客服知识库，并设计SFT问答样本生产规范，提升售后问题检索与回答质量。",
-      tags: ["知识清洗", "Chunk分类", "术语表", "回答改写"],
+      scale: "8,000条 / 2024.10-2025.03",
+      desc: "基于中英文核心知识库、RAG检索、术语表和Query改写，建设海外售后问答数据，提升高频售后场景回答准确性。",
+      tags: ["知识库治理", "术语处理", "Query改写", "SFT样本"],
       detailSections: [
-        { title: "核心价值", items: ["把分散的售后知识转化为稳定、可检索、可用于SFT生产的垂直知识库数据。"] },
-        { title: "我的角色", items: ["入库边界制定｜资料清洗切块｜知识目录搭建｜SFT样本规范｜幻觉回答控制"] },
-        { title: "项目背景", items: ["公司原有售后FAQ、产品手册、操作视频文本等知识分散，用户难以快速找到对应说明，智能客服需要作为APP帮助体系的自然语言入口。"] },
-        { title: "我的任务", items: ["制定知识库入库边界，将配网步骤、设备添加/解绑流程、设备离线排查SOP等稳定知识纳入知识库。", "清洗售后FAQ、产品手册、操作视频转写文本，建立设备操作知识目录，并整理多语言术语对照表。", "设计SFT阶段样本生产规范，制定候选回答选择和改写规则。"] },
-        { title: "项目成果", items: ["构建多语言垂直知识库约4,800条。", "建立新能源领域术语对照表720条。", "基于300条评测集，RAG Top-3检索命中率由72%提升至86%。"] }
+        { title: "项目背景", items: ["公司海外用户高频咨询集中在配网失败、设备离线、APP无数据、蓝牙连接异常、设备添加和解绑等售后问题。项目基于中文和英文核心知识库，结合RAG检索、术语表和Query改写，建设售后问答数据。"] },
+        { title: "我的角色", items: ["知识库治理｜术语与问法处理｜SFT样本构建｜回答选择、改写和质检规则制定"] },
+        { title: "核心价值", items: ["基于300条固定评测集优化召回效果，RAG Top-3检索命中率由72%提升至86%。", "交付约8,000条RAG问答标准样本及SFT训练数据，样本抽检合格率达到95%以上，试运行阶段高频售后问题首轮自动应答覆盖率约65%。"] }
       ],
       icon: Database
     },
     {
-      title: "客服消息意图识别",
-      type: "NLP 分类",
-      scale: "3000条 / 4个月",
-      desc: "基于历史客服消息、销售咨询记录和售后FAQ，构建售前、售后、意图不明确三类意图体系，减少人工首轮分拣成本。",
-      tags: ["意图体系", "边界样本", "分流规则", "试标抽检"],
+      title: "储能APP客服意图分流",
+      type: "Intent 数据",
+      scale: "3,000条 / 2024.07-2024.09",
+      desc: "基于本地部署模型验证客服消息意图识别能力，将海外用户消息分为售前咨询、售后咨询和闲聊兜底类。",
+      tags: ["意图标签", "消息分流", "标注验收", "评测集"],
       detailSections: [
-        { title: "核心价值", items: ["把用户消息转成可分流、可训练、可评测的意图识别数据，降低售前售后首轮分拣压力。"] },
-        { title: "我的角色", items: ["意图体系设计｜分流规则制定｜边界样本补充｜训练样本构建｜bad case复盘"] },
-        { title: "项目背景", items: ["项目基于本地部署模型验证客服消息意图识别能力，将用户消息分为售前、售后、意图不明确三类，分别流转至销售、售后或人工判断。"] },
-        { title: "我的任务", items: ["设计售前、售后、意图不明确三类一级意图体系。", "制定“售前→销售团队、售后→售后团队、意图不明确→人工判断”的分流规则。", "补充短句模糊、售前售后混合表达等边界样本，组织试标、抽检和规则优化。"] },
-        { title: "项目成果", items: ["构建意图识别训练及评测样本约3,000条。", "沉淀售前/售后边界规则、人工判断标准和bad case复盘表。"] }
+        { title: "项目背景", items: ["公司海外用户会通过APP客服入口咨询产品购买、价格、合作方式，也会反馈APP使用、设备离线、数据显示异常等售后问题。原有流程需要人工先判断用户消息类型，再分发给销售或售后团队。"] },
+        { title: "我的角色", items: ["意图标签设计｜标注规则制定｜客服消息清洗｜意图标注｜质检返修｜评测集划分"] },
+        { title: "核心价值", items: ["构建约3,000条客服消息意图识别样本，其中500条作为固定评测集，样本抽检合格率达到95%以上。", "支撑本地部署模型完成售前、售后、闲聊兜底三类意图验证，一级意图识别准确率约85%，为后续售后RAG问答项目提供入口分流基础。"] }
       ],
       icon: BrainCircuit
-    },
-    {
-      title: "工具类APP与B端后台",
-      type: "UI 设计",
-      scale: "2021-2024",
-      desc: "负责工具类APP、小程序、WEB后台及B端销售后台界面设计与交互优化，沉淀基础视觉规范并推动开发落地。",
-      tags: ["B端后台", "交互梳理", "视觉规范", "UI走查"],
-      detailSections: [
-        { title: "核心价值", items: ["UI设计经历补足了我对产品流程、业务逻辑和用户体验的理解，也让后续AI数据项目更容易和产品侧对齐。"] },
-        { title: "我的角色", items: ["需求沟通｜竞品分析｜流程梳理｜高保真设计｜切图标注｜UI走查"] },
-        { title: "项目背景", items: ["公司需要持续迭代自研APP、小程序、WEB后台及B端销售后台，提升业务流程效率和界面一致性。"] },
-        { title: "我的任务", items: ["与产品经理进行项目初期产品设定讨论，并研究B端用户体验。", "参考Ant Design进行页面设计并输出后台视觉规范，同步开发人员降低开发成本。", "系统梳理页面之间的交互逻辑并优化用户体验。"] },
-        { title: "项目成果", items: ["完成多端界面设计与交互优化，配合产品、开发、测试推进页面落地。", "沉淀基础视觉规范，为后续跨部门协作提供统一设计依据。"] }
-      ],
-      icon: Layers
     }
   ];
 
@@ -707,39 +690,39 @@ const ExperienceSection = () => {
 
   const experiences = [
     {
-      period: "2024.03 - 2026.06",
+      period: "2024.3 - 2026.6",
       company: "深圳益邦阳光有限公司",
       role: "AI项目经理助理",
-      tags: ["RAG", "SFT", "多模态", "质检"],
+      tags: ["RAG", "SFT", "PO识别", "质检复盘"],
       details: [
-        "参与新能源储能业务AI项目落地，覆盖客服消息分流、售后RAG知识库、SFT问答样本、多模态PO识别等方向。",
-        "负责需求拆解、规则制定、样本构建、标注质检与bad case复盘，推动数据任务可标注、可评测、可交付。",
-        "对接产品、算法、客服、销售等角色，将售前/售后分流、售后问答、订单字段校验等业务问题转化为数据任务。",
-        "基于评测结果持续优化字段抽取、知识检索、候选回答改写和分流规则，推动模型在垂直业务场景中落地。"
+        "参与公司储能业务AI项目落地，围绕客服消息分流、售后RAG知识库、SFT问答样本、多模态PO识别等方向开展数据侧工作。",
+        "负责需求拆解、规则制定、样本构建、标注流程管理与bad case复盘，将业务问题转化为可标注、可评测的数据任务。",
+        "制定PO字段抽取、知识库入库、Query改写、SFT样本生产、意图分流等规则，推动标注、抽检、返修复核和数据交付。",
+        "交付约8,000条RAG问答标准样本及SFT训练数据，构建约3,000条客服消息意图识别样本，并沉淀PO字段标注规范与高频bad case样本。"
       ]
     },
     {
-      period: "2021.03 - 2024.03",
+      period: "2021.03 - 2024.05",
       company: "上海知渔信息科技有限公司",
       role: "UI设计师",
-      tags: ["APP", "小程序", "WEB后台", "B端"],
+      tags: ["C端APP", "B端后台", "视觉规范", "UI走查"],
       details: [
-        "负责公司自研APP、小程序、WEB后台及B端销售后台的界面设计与交互优化。",
-        "参与需求沟通、竞品分析、页面流程梳理、高保真设计、切图标注和UI走查。",
-        "参考Ant Design输出后台视觉规范，和开发同步设计规则，降低页面实现与维护成本。",
-        "配合产品、开发、测试完成页面落地，并沉淀基础视觉规范和交互梳理经验。"
+        "负责公司多款工具类产品和后台系统设计，包括青芒天气、青芒日历等C端APP，以及知渔管理系统等B端后台。",
+        "参与需求沟通、竞品分析、页面流程梳理、高保真设计、切图标注和开发交接。",
+        "结合Ant Design等后台设计规范，输出表单、列表、筛选、弹窗、数据看板等页面样式，提升一致性和开发效率。",
+        "配合产品、开发、测试完成UI还原评审，对页面间距、字号、颜色、状态展示和交互反馈等问题进行走查和修改。"
       ]
     },
     {
-      period: "本科",
-      company: "计算机与产品体验复合背景",
-      role: "教育背景",
-      tags: ["业务理解", "流程梳理", "数据任务", "协作"],
+      period: "2021 - 2024",
+      company: "天津大学",
+      role: "学生",
+      tags: ["计算机科学", "数据结构", "算法", "人机交互"],
       details: [
-        "具备本科教育背景，长期围绕产品流程、用户体验和业务逻辑进行项目实践。",
-        "从UI设计转向AI数据项目执行后，能更快理解产品需求、算法约束和业务交付边界。",
-        "熟悉文档沉淀、任务拆分、规则制定和阶段性复盘，适合承担AI数据项目的执行与协调工作。",
-        "能够把跨部门沟通内容整理成清晰的标注规则、评测口径和交付标准。"
+        "系统学习计算机科学基础课程，覆盖数据结构、算法设计、操作系统与数据库原理等核心方向。",
+        "完成面向真实业务场景的课程项目练习，理解从需求拆解、数据建模到功能实现的完整过程。",
+        "持续关注人工智能与人机交互方向，积累将技术逻辑转化为产品体验的基础能力。",
+        "参与团队协作式项目训练，熟悉文档沉淀、任务拆分与阶段性复盘。"
       ]
     }
   ];
@@ -1007,12 +990,75 @@ const ExperienceSection = () => {
 };
 
 const ContactSection = () => {
+  const [copiedContact, setCopiedContact] = useState<string | null>(null);
+  const [copyToast, setCopyToast] = useState("");
   const contacts = [
-    { label: "邮箱", value: "hi@dengshuming.com", icon: Mail },
-    { label: "电话", value: "153-0790-1581", icon: MessageCircle },
-    { label: "定位", value: "AI项目经理助理", icon: BookOpen },
-    { label: "简历", value: "AI训练师 / 数据项目执行", icon: FileText }
+    { label: "邮箱", value: "hi@dengshuming.com", icon: Mail, action: "copy", copyValue: "hi@dengshuming.com" },
+    { label: "电话", value: "153-0790-1581", icon: Phone, action: "phone", copyValue: "153-0790-1581" },
+    { label: "网站", value: "dengshuming.com", icon: Globe, action: "link", href: "https://dengshuming.com" },
+    { label: "简历", value: "下载完整PDF", icon: FileText, action: "download", href: "./resume.pdf" }
   ];
+
+  const copyText = async (value: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch {
+      const input = document.createElement("textarea");
+      input.value = value;
+      input.setAttribute("readonly", "");
+      input.style.position = "fixed";
+      input.style.opacity = "0";
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+    }
+  };
+
+  const handleContactClick = async (contact: typeof contacts[number]) => {
+    if (contact.action === "copy" && contact.copyValue) {
+      await copyText(contact.copyValue);
+      setCopiedContact(contact.label);
+      setCopyToast(`${contact.label}已复制`);
+      window.setTimeout(() => {
+        setCopiedContact(null);
+        setCopyToast("");
+      }, 1800);
+      return;
+    }
+
+    if (contact.action === "phone" && contact.copyValue) {
+      await copyText(contact.copyValue);
+      setCopiedContact(contact.label);
+      setCopyToast(`${contact.label}已复制`);
+      window.setTimeout(() => {
+        setCopiedContact(null);
+        setCopyToast("");
+      }, 1800);
+
+      const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.setTimeout(() => {
+          window.location.href = `tel:${contact.copyValue.replace(/\D/g, "")}`;
+        }, 450);
+      }
+      return;
+    }
+
+    if (contact.action === "link" && contact.href) {
+      window.open(contact.href, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    if (contact.action === "download" && contact.href) {
+      const link = document.createElement("a");
+      link.href = contact.href;
+      link.download = "邓述明 - AI数据训练师-15307901581.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
 
   return (
     <SectionWrapper id="contact" className="bg-zinc-950 text-zinc-200">
@@ -1028,7 +1074,16 @@ const ContactSection = () => {
             {contacts.map((contact, i) => (
               <motion.div
                 key={i}
+                role="button"
+                tabIndex={0}
                 whileHover={{ y: -5 }}
+                onClick={() => handleContactClick(contact)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleContactClick(contact);
+                  }
+                }}
                 className="bg-zinc-900 rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col items-center justify-center hover:bg-zinc-800 transition-all duration-300 cursor-pointer shadow-xl ring-1 ring-inset ring-transparent hover:ring-zinc-700 w-full group"
               >
                 <div className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0 mb-4 md:mb-5 transition-all duration-500 group-hover:scale-110 group-hover:border-zinc-600">
@@ -1036,7 +1091,9 @@ const ContactSection = () => {
                 </div>
                 <div className="text-center flex flex-col justify-center min-w-0">
                   <h4 className="text-white text-base md:text-lg lg:text-xl font-medium mb-1.5">{contact.label}</h4>
-                  <p className="text-zinc-400 text-xs md:text-sm lg:text-base transition-colors group-hover:text-zinc-300 truncate">{contact.value}</p>
+                  <p className="text-zinc-400 text-xs md:text-sm lg:text-base transition-colors group-hover:text-zinc-300 truncate">
+                    {copiedContact === contact.label ? "已复制" : contact.value}
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -1047,6 +1104,17 @@ const ContactSection = () => {
       <div className="absolute bottom-6 left-0 w-full text-center text-zinc-600 text-sm font-mono tracking-wider pointer-events-none hidden md:block z-10">
         © 2026 DACHENGZI
       </div>
+
+      {copyToast && (
+        <motion.div
+          initial={{ opacity: 0, y: 18, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 18, scale: 0.96 }}
+          className="fixed left-1/2 bottom-[calc(2rem+env(safe-area-inset-bottom))] z-[120] -translate-x-1/2 rounded-full border border-zinc-700 bg-zinc-900/95 px-5 py-3 text-sm font-medium text-white shadow-2xl backdrop-blur-md"
+        >
+          {copyToast}
+        </motion.div>
+      )}
     </SectionWrapper>
   );
 };
