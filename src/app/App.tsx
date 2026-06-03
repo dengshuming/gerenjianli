@@ -162,12 +162,12 @@ const Navbar = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-      className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900/80 backdrop-blur-xl border border-zinc-700/50 rounded-full px-4 md:px-6 h-14 md:h-auto md:py-2 flex items-center justify-between sm:justify-center gap-1 sm:gap-0 shadow-2xl w-[92%] sm:w-auto max-w-[420px]"
+      className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900/80 backdrop-blur-xl border border-zinc-700/50 rounded-full px-3 md:px-4 h-14 flex items-center shadow-2xl w-[calc(100vw-48px)] max-w-[460px]"
     >
       <a 
         href="#hero" 
         onClick={(e) => handleNavClick(e, "hero")} 
-        className={`inline-flex h-8 flex-1 basis-0 min-w-0 sm:flex-none items-center justify-center font-black tracking-widest text-base leading-none cursor-pointer transition-all px-2 sm:pr-4 ${
+        className={`inline-flex h-10 flex-[1.15] basis-0 min-w-0 items-center justify-center font-black tracking-widest text-base leading-[1] cursor-pointer transition-all px-2 ${
           activeSection === "hero" 
             ? "text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" 
             : "text-zinc-400 hover:text-zinc-200"
@@ -176,15 +176,13 @@ const Navbar = () => {
         DSM.
       </a>
       
-      <div className="h-4 w-px bg-zinc-700/80 hidden sm:block mx-2"></div>
-      
-      <div className="contents sm:flex sm:flex-none sm:items-center sm:gap-2">
+      <div className="flex flex-[4] min-w-0 items-center gap-1">
         {navItems.map((item) => (
           <a
             key={item.id}
             href={`#${item.id}`}
             onClick={(e) => handleNavClick(e, item.id)}
-            className={`relative inline-flex h-8 flex-1 basis-0 min-w-0 sm:flex-none items-center justify-center px-2 sm:px-4 text-sm leading-none transition-all duration-300 rounded-full ${
+            className={`relative inline-flex h-10 flex-1 basis-0 min-w-0 items-center justify-center px-2 text-sm leading-[1] transition-all duration-300 rounded-full ${
               activeSection === item.id 
                 ? "text-white font-bold bg-white/10 ring-1 ring-white/20 shadow-sm" 
                 : "text-zinc-400 font-medium hover:text-zinc-200 hover:bg-zinc-800/50"
@@ -216,9 +214,9 @@ const HeroSection = () => {
           </div>
           {/* Mobile multiline title */}
           <div className="md:hidden flex flex-col items-center space-y-0 w-full">
-            <span className="text-shimmer inline-block text-[16vw] leading-[0.95] font-black tracking-normal uppercase text-white">DENG</span>
-            <span className="text-shimmer inline-block text-[16vw] leading-[0.95] font-black tracking-normal uppercase text-white">SHU</span>
-            <span className="text-shimmer inline-block text-[16vw] leading-[0.95] font-black tracking-normal uppercase text-white">MING</span>
+            <span className="text-shimmer inline-block text-[16vw] leading-[0.95] font-black tracking-tight uppercase text-white">DENG</span>
+            <span className="text-shimmer inline-block text-[16vw] leading-[0.95] font-black tracking-tight uppercase text-white">SHU</span>
+            <span className="text-shimmer inline-block text-[16vw] leading-[0.95] font-black tracking-tight uppercase text-white">MING</span>
           </div>
           
           <motion.div
@@ -241,9 +239,9 @@ const HeroSection = () => {
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="md:hidden flex flex-col items-center space-y-3 w-full mt-2"
             >
-              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">• AI项目经理助理</span>
-              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">• 数据规则设计</span>
-              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">• 模型落地执行</span>
+              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">AI项目经理助理</span>
+              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">数据规则设计</span>
+              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">模型落地执行</span>
             </motion.div>
 
             <motion.div
@@ -296,10 +294,10 @@ const AboutSection = () => {
             whileInView={{ x: 0, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="hidden lg:flex lg:col-span-5 w-full bg-zinc-900 rounded-3xl flex-col relative overflow-hidden group shadow-2xl ring-1 ring-inset ring-zinc-800 will-change-transform"
+            className="hidden lg:flex lg:col-span-5 w-full bg-zinc-900 rounded-3xl p-0 flex-col justify-between relative overflow-hidden group shadow-2xl ring-1 ring-inset ring-zinc-800 will-change-transform"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/40 to-zinc-950 opacity-80" />
-            <div className="relative z-10 flex-1 min-h-0 overflow-hidden bg-zinc-950">
+            <div className="relative z-10 h-full w-full overflow-hidden bg-zinc-950">
               <img src={profilePhoto} alt="邓述明头像" className="h-full w-full object-cover object-[50%_18%] grayscale-[15%] transition duration-700 group-hover:grayscale-0 group-hover:scale-[1.03]" />
             </div>
           </motion.div>
@@ -324,9 +322,9 @@ const AboutSection = () => {
                 className="space-y-4 h-full overflow-y-auto hide-scrollbar pb-10 md:pb-0"
               >
                 {[
-                  "AI数据项目推进能力：具备从需求理解、规则制定、样本构建到质检复盘的数据项目执行经验，能够在多环节协作中保持交付节奏和数据质量。",
-                  "业务拆解与规则沉淀能力：能够将复杂需求拆解为清晰的数据任务，形成可执行、可复用的标注规则和质检标准，帮助团队降低沟通成本并提升执行一致性。",
-                  "产品视角与协作沟通能力：具备UI设计背景，理解用户体验、页面流程和业务逻辑，能够在产品、算法、业务等多方之间准确对齐需求，推动问题闭环。"
+                  "全流程数据经验：具备从需求拆解、标注规则制定、样本构建、质检验收到bad case复盘的完整数据项目执行经验，覆盖分类、问答、多模态等多种数据类型。",
+                  "规则与质量意识：注重标注边界的清晰定义和规则文档的完整性，能够将模糊需求转化为可执行的标注规范，降低标注歧义和返修率，所负责项目的样本抽检合格率均达95%以上。",
+                  "跨职能沟通能力：具备UI设计背景，理解产品逻辑与用户路径，能够在算法、业务、运营等多方协作中准确理解需求出发点，有效减少沟通成本。"
                 ].map((text, i) => (
                   <motion.p 
                     key={i}
@@ -375,6 +373,10 @@ const ProjectsSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const projectModalScrollRef = useRef<HTMLDivElement>(null);
+  const projectAutoStoppedRef = useRef(false);
+  const projectAutoScrollRef = useRef(false);
+  const projectModalAutoStoppedRef = useRef(false);
   const projectModalSections = ["项目背景", "我的角色", "核心价值"];
 
   useEffect(() => {
@@ -383,6 +385,7 @@ const ProjectsSection = () => {
     const observer = new IntersectionObserver((entries) => {
       if (!entries[0].isIntersecting) {
         setActiveIndex(0);
+        projectAutoStoppedRef.current = false;
         if (scrollRef.current) {
           scrollRef.current.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
         }
@@ -392,8 +395,23 @@ const ProjectsSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const scrollTo = (index: number) => {
+  const isMobileProjectView = () => window.matchMedia("(max-width: 767px)").matches;
+
+  const stopProjectAutoCarousel = () => {
+    if (isMobileProjectView() && !projectAutoScrollRef.current) {
+      projectAutoStoppedRef.current = true;
+    }
+  };
+
+  const stopProjectModalAutoScroll = () => {
+    projectModalAutoStoppedRef.current = true;
+  };
+
+  const scrollTo = (index: number, userInitiated = true) => {
     if (!scrollRef.current) return;
+    if (userInitiated) {
+      stopProjectAutoCarousel();
+    }
     const target = scrollRef.current;
     const child = target.children[0] as HTMLElement;
     const gap = 16;
@@ -418,45 +436,135 @@ const ProjectsSection = () => {
 
   const projects = [
     {
-      title: "PO文档理解与字段提取",
+      title: "海外PO采购单识别",
       type: "多模态 PO",
       scale: "2025.04 - 2026.06",
-      desc: "围绕海外客户PO图片和PDF，建设多模态字段抽取与结构化输出数据，提升订单关键信息识别稳定性。",
-      tags: ["文档理解", "字段提取", "格式统一", "bad case"],
+      desc: "针对海外客户PO图片和PDF文件，制定字段抽取、完整性判断和结构化输出规则，提升采购单关键信息识别稳定性。",
+      tags: ["字段规则", "团队管理", "评测集", "bad case"],
       detailSections: [
-        { title: "项目背景", items: ["公司海外B2B订单流程中，客户PO采购单存在图片和PDF等不同形式，不同客户的文件版式、字段位置和表达方式不统一，人工识别订单关键信息时容易出现型号漏看、金额格式混乱、币种识别错误等问题。项目围绕客户PO文件构建多模态字段抽取和结构化输出数据，使模型能够从PO图片和PDF中稳定提取客户名称、PO编号、产品型号、数量、币种、金额、交付国家、下单日期等关键字段，并按照统一格式输出。"] },
-        { title: "我的角色", items: ["数据流程设计｜字段规则制定｜标注验收把控｜质检与返修跟进｜bad case复盘"] },
-        { title: "核心价值", items: ["基于500条固定人工评测集验证，模型关键字段抽取准确率由初版约74%提升至88%，重点覆盖产品型号、数量、币种、金额等高风险字段。", "通过字段格式统一规则和结构化输出规范优化，结构化输出格式合规率达到92%。"] }
+        { title: "项目背景", items: ["海外客户PO采购单存在图片和PDF两种文件类型，版式、字段位置和表达方式不统一，字段缺失、不可读、格式异常等情况会影响模型稳定输出，需要建立可执行的字段抽取和人工复核判断标准。"] },
+        { title: "我的角色", items: ["字段标注规则设计：针对PO图片和PDF两种文件类型，制定字段抽取规则和完整性判断标准，定义字段缺失、不可读、格式异常三类情况的标注方式，要求模型输出结构化字段结果的同时标记是否需人工复核。", "标注团队管理：根据标注员能力水平和PO文件复杂度进行任务匹配，优先将产品型号、金额、币种等高风险字段分配给经验较强的标注员，同步规则培训，把控整体进度和准确率。", "评测集建设：从合格样本中抽取500条固定评测集，覆盖不同PO版式、字段缺失、型号格式复杂等典型难样本，用于验证模型在各类文件和高风险字段上的识别效果。", "Bad case迭代：区分模型预提取错误和人工标注错误，针对型号漏后缀、金额币种格式混乱、多余字段未剔除等问题，修订标注规则和完整性判断标准，补充评测样本。"] },
+        { title: "核心价值", items: ["基于500条固定人工评测集验证，模型关键字段抽取准确率由初版约74%提升至88%。", "通过字段完整性判断规则和结构化输出规范优化，新增对缺失字段、不可读字段、格式异常的标记能力，结构化输出格式合规率达到92%。"] }
       ],
       icon: Box
     },
     {
-      title: "APP智能客服RAG+SFT",
+      title: "售后智能客服RAG+SFT",
       type: "RAG + SFT",
       scale: "8,000条 / 2024.10-2025.03",
-      desc: "基于中英文核心知识库、RAG检索、术语表和Query改写，建设海外售后问答数据，提升高频售后场景回答准确性。",
-      tags: ["知识库治理", "术语处理", "Query改写", "SFT样本"],
+      desc: "围绕储能APP售后高频问题，清洗知识库、建立术语映射并构建SFT问答样本，提升检索命中和首轮应答覆盖。",
+      tags: ["知识库清洗", "术语映射", "SFT问答", "质检复盘"],
       detailSections: [
-        { title: "项目背景", items: ["公司海外用户高频咨询集中在配网失败、设备离线、APP无数据、蓝牙连接异常、设备添加和解绑等售后问题。项目基于中文和英文核心知识库，结合RAG检索、术语表和Query改写，建设售后问答数据。"] },
-        { title: "我的角色", items: ["知识库治理｜术语与问法处理｜SFT样本构建｜回答选择、改写和质检规则制定"] },
-        { title: "核心价值", items: ["基于300条固定评测集优化召回效果，RAG Top-3检索命中率由72%提升至86%。", "交付约8,000条RAG问答标准样本及SFT训练数据，样本抽检合格率达到95%以上，试运行阶段高频售后问题首轮自动应答覆盖率约65%。"] }
+        { title: "项目背景", items: ["储能APP售后场景中，用户高频咨询集中在配网失败、设备离线、APP无数据等问题。原始知识来自售后FAQ、产品手册和操作视频文本，需要筛除动态信息、统一术语表达，并沉淀可检索、可回答的标准样本。"] },
+        { title: "我的角色", items: ["知识库清洗：梳理售后FAQ、产品手册、操作视频文本，制定入库边界，保留稳定操作步骤和排查流程，排除设备状态、SN绑定关系等动态信息，确保知识库内容准确可依据。", "术语映射表建立：整理数采器、配网、SOC、设备离线、蓝牙等产品专有词汇和用户常见问法，建立术语与Query改写映射表，统一召回关键词和回答中的术语表达。", "SFT问答样本构建：围绕配网失败、设备离线、APP无数据等高频场景，设计“多模型候选回答-人工优选-标准答案改写”的样本流程，制定回答选择标准和改写规则。", "质检与bad case复盘：抽检标注和改写数据，重点核查幻觉回答、召回失败、术语不一致等问题，整理bad case反哺标注规则和评测样本，推动后续迭代。"] },
+        { title: "核心价值", items: ["通过知识清洗、术语补充和Query改写优化，RAG Top-3检索命中率由72%提升至86%，建立约150条术语与Query改写映射记录。", "交付约8,000条RAG问答标准样本及SFT训练数据，样本抽检合格率达95%以上；试运行阶段高频售后问题首轮自动应答覆盖率约65%。"] }
       ],
       icon: Database
     },
     {
-      title: "储能APP客服意图分流",
+      title: "客服消息分类意图识别",
       type: "Intent 数据",
       scale: "3,000条 / 2024.07-2024.09",
-      desc: "基于本地部署模型验证客服消息意图识别能力，将海外用户消息分为售前咨询、售后咨询和闲聊兜底类。",
-      tags: ["意图标签", "消息分流", "标注验收", "评测集"],
+      desc: "从零建立售前咨询、售后咨询、闲聊兜底三类意图标签，清洗客服消息并建设固定评测集。",
+      tags: ["意图分类", "难样本", "规则培训", "模型评测"],
       detailSections: [
-        { title: "项目背景", items: ["公司海外用户会通过APP客服入口咨询产品购买、价格、合作方式，也会反馈APP使用、设备离线、数据显示异常等售后问题。原有流程需要人工先判断用户消息类型，再分发给销售或售后团队。"] },
-        { title: "我的角色", items: ["意图标签设计｜标注规则制定｜客服消息清洗｜意图标注｜质检返修｜评测集划分"] },
-        { title: "核心价值", items: ["构建约3,000条客服消息意图识别样本，其中500条作为固定评测集，样本抽检合格率达到95%以上。", "支撑本地部署模型完成售前、售后、闲聊兜底三类意图验证，一级意图识别准确率约85%，为后续售后RAG问答项目提供入口分流基础。"] }
+        { title: "项目背景", items: ["储能APP客服入口同时承接售前咨询、售后咨询和闲聊兜底类消息，需要基于完整对话上下文建立清晰的意图分级和分流规则，支撑本地部署模型完成客服消息自动识别。"] },
+        { title: "我的角色", items: ["意图分类体系设计：从零建立售前咨询、售后咨询、闲聊兜底三类主标签，细化价格咨询、设备异常、APP使用等典型场景，制定基于完整对话上下文的判断规则，明确各类分流去向。", "数据清洗与难样本处理：组织历史客服消息清洗，重点复核售前售后边界模糊、上下文不完整、英文口语化表达等难判断样本，制定边界样本的标注规范，保证标签一致性。", "规则培训与迭代：组织标注员规则培训，跟进标注过程中的边界问题，针对误标样本及时修订规则并同步全员，推动整体准确率持续提升。", "模型评测：从合格样本中划出500条固定评测集，对训练后的本地部署模型进行意图识别效果验证，分析售前售后混淆、闲聊误判等典型错误类型，定位规则漏洞并反向修订标注规范。"] },
+        { title: "核心价值", items: ["构建约3,000条客服消息意图识别样本，其中500条作为固定评测集，样本抽检合格率达到95%以上。", "支撑本地部署模型完成三类意图验证，一级意图识别准确率约85%。"] }
       ],
       icon: BrainCircuit
     }
   ];
+
+  useEffect(() => {
+    const sectionEl = document.getElementById("projects");
+    if (!sectionEl) return;
+
+    let timeoutIds: number[] = [];
+
+    const stopSequence = () => {
+      timeoutIds.forEach((id) => window.clearTimeout(id));
+      timeoutIds = [];
+      projectAutoScrollRef.current = false;
+    };
+
+    const queueStep = (index: number, delay: number, shouldStopAfter = false) => {
+      const timeoutId = window.setTimeout(() => {
+        if (projectAutoStoppedRef.current || selectedProject !== null || !isMobileProjectView()) {
+          stopSequence();
+          return;
+        }
+        projectAutoScrollRef.current = true;
+        scrollTo(index, false);
+        window.setTimeout(() => {
+          projectAutoScrollRef.current = false;
+        }, 700);
+        if (shouldStopAfter) {
+          projectAutoStoppedRef.current = true;
+        }
+      }, delay);
+      timeoutIds.push(timeoutId);
+    };
+
+    const startSequence = () => {
+      if (timeoutIds.length || projectAutoStoppedRef.current || !isMobileProjectView()) return;
+      projectAutoScrollRef.current = true;
+      scrollTo(0, false);
+      window.setTimeout(() => {
+        projectAutoScrollRef.current = false;
+      }, 350);
+      queueStep(1, 650);
+      queueStep(2, 1300);
+      queueStep(0, 1950, true);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        startSequence();
+      } else {
+        stopSequence();
+      }
+    }, { threshold: 0.65 });
+
+    observer.observe(sectionEl);
+
+    return () => {
+      observer.disconnect();
+      stopSequence();
+    };
+  }, [selectedProject]);
+
+  useEffect(() => {
+    if (selectedProject === null || !isMobileProjectView()) return;
+
+    projectModalAutoStoppedRef.current = false;
+    const scroller = projectModalScrollRef.current;
+    if (!scroller) return;
+
+    scroller.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+
+    const startDelay = window.setTimeout(() => {
+      const intervalId = window.setInterval(() => {
+        if (projectModalAutoStoppedRef.current) {
+          window.clearInterval(intervalId);
+          return;
+        }
+
+        const reachedEnd = scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2;
+        if (reachedEnd) {
+          window.clearInterval(intervalId);
+          return;
+        }
+
+        scroller.scrollTop += 0.8;
+      }, 24);
+    }, 900);
+
+    return () => {
+      window.clearTimeout(startDelay);
+      projectModalAutoStoppedRef.current = true;
+    };
+  }, [selectedProject]);
 
   return (
     <SectionWrapper id="projects" className="bg-zinc-950 text-zinc-200">
@@ -546,6 +654,9 @@ const ProjectsSection = () => {
           <div 
             ref={scrollRef}
             className="flex flex-row overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 w-full h-full"
+            onPointerDown={stopProjectAutoCarousel}
+            onTouchStart={stopProjectAutoCarousel}
+            onWheel={stopProjectAutoCarousel}
             onScroll={(e) => {
               const target = e.currentTarget;
               const child = target.children[0] as HTMLElement;
@@ -606,7 +717,7 @@ const ProjectsSection = () => {
           {projects.map((_, i) => (
             <div
               key={i}
-              onClick={() => scrollTo(i)}
+              onClick={() => scrollTo(i, true)}
               className={`flex-1 h-full rounded-full cursor-pointer transition-colors duration-300 ${i === activeIndex ? 'bg-zinc-500' : 'bg-zinc-800 hover:bg-zinc-700'}`}
             />
           ))}
@@ -623,9 +734,9 @@ const ProjectsSection = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.28, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full md:max-w-3xl max-h-[calc(100dvh-2rem-env(safe-area-inset-bottom))] md:max-h-[74%] rounded-[2rem] md:rounded-3xl bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 md:p-8 overflow-hidden"
+            className="w-full md:max-w-3xl h-[60dvh] md:h-auto max-h-[60dvh] md:max-h-[74%] rounded-[2rem] md:rounded-3xl bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 md:p-8 overflow-hidden flex flex-col"
           >
-            <div className="flex items-start justify-between gap-4 mb-5">
+            <div className="flex items-start justify-between gap-4 mb-5 shrink-0">
               <div className="min-w-0">
                 <span className="inline-flex px-3 py-1 rounded-full bg-zinc-950 border border-zinc-800 text-zinc-400 text-xs font-mono mb-3">
                   {projects[selectedProject].type} · {projects[selectedProject].scale}
@@ -648,9 +759,18 @@ const ProjectsSection = () => {
             </div>
 
             <div
-              onWheel={(e) => e.stopPropagation()}
-              onTouchMove={(e) => e.stopPropagation()}
-              className="max-h-[calc(100dvh-206px-env(safe-area-inset-bottom))] md:max-h-[calc(74vh-210px)] overflow-y-auto overscroll-contain hide-scrollbar pr-1 [mask-image:linear-gradient(to_bottom,black_97%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_97%,transparent_100%)]"
+              ref={projectModalScrollRef}
+              onWheel={(e) => {
+                stopProjectModalAutoScroll();
+                e.stopPropagation();
+              }}
+              onTouchStart={stopProjectModalAutoScroll}
+              onTouchMove={(e) => {
+                stopProjectModalAutoScroll();
+                e.stopPropagation();
+              }}
+              onPointerDown={stopProjectModalAutoScroll}
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain hide-scrollbar pr-1 pb-7 [mask-image:linear-gradient(to_bottom,black_0%,black_86%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_0%,black_86%,transparent_100%)] md:max-h-[calc(74vh-210px)]"
             >
               <div className="space-y-5 text-zinc-300">
                 {projectModalSections.map((sectionTitle) => {
@@ -681,6 +801,8 @@ const ProjectsSection = () => {
 const ExperienceSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const dragStartRef = useRef<{ x: number; scrollLeft: number } | null>(null);
+  const experienceAutoStoppedRef = useRef(false);
+  const experienceAutoScrollRef = useRef(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeExperience, setActiveExperience] = useState<number | null>(null);
   const [isMobileExperienceScrolled, setIsMobileExperienceScrolled] = useState(false);
@@ -690,12 +812,12 @@ const ExperienceSection = () => {
       period: "2024.7 - 2026.6",
       company: "深圳益邦阳光有限公司",
       role: "AI项目经理助理",
-      tags: ["RAG", "SFT", "PO识别", "质检复盘"],
+      tags: ["规则撰写", "团队培训", "质检验收", "bad case"],
       details: [
-        "参与公司储能业务AI项目落地，围绕客服消息分流、售后RAG知识库、SFT问答样本、多模态PO识别等方向开展数据侧工作。",
-        "负责需求拆解、规则制定、样本构建、标注流程管理与bad case复盘，将业务问题转化为可标注、可评测的数据任务。",
-        "制定PO字段抽取、知识库入库、Query改写、SFT样本生产、意图分流等规则，推动标注、抽检、返修复核和数据交付。",
-        "交付约8,000条RAG问答标准样本及SFT训练数据，构建约3,000条客服消息意图识别样本，并沉淀PO字段标注规范与高频bad case样本。"
+        "参与公司储能业务AI项目落地，负责客服消息分流、售后问答、多模态PO识别三个方向的数据工作，覆盖需求拆解、规则制定、样本构建到质检交付的完整流程。",
+        "负责标注规则撰写与团队培训，统筹标注任务分配、质检验收和bad case复盘，推动规则持续迭代，三个项目样本抽检合格率均达95%以上。",
+        "围绕PO字段抽取、RAG知识库清洗、术语与Query改写、SFT问答样本和客服意图识别，沉淀可复用的数据规则与验收标准。",
+        "配合业务、算法和标注团队定位模型预提取错误、人工标注错误和规则边界问题，将复盘结果反向补充到评测集和标注规范中。"
       ]
     },
     {
@@ -705,13 +827,13 @@ const ExperienceSection = () => {
       tags: ["C端APP", "B端后台", "视觉规范", "UI走查"],
       details: [
         "负责公司多款工具类产品和后台系统设计，包括青芒天气、青芒日历等C端APP，以及知渔管理系统等B端后台。",
-        "参与需求沟通、竞品分析、页面流程梳理、高保真设计、切图标注和开发交接。",
+        "参与需求沟通、竞品分析、页面流程梳理、高保真设计、切图标注和UI走查，配合产品、开发、测试完成页面落地，并沉淀基础视觉规范。",
         "结合Ant Design等后台设计规范，输出表单、列表、筛选、弹窗、数据看板等页面样式，提升一致性和开发效率。",
-        "配合产品、开发、测试完成UI还原评审，对页面间距、字号、颜色、状态展示和交互反馈等问题进行走查和修改。"
+        "跟进多个版本的需求变更，维护并更新C端和B端视觉规范文档，减少跨版本重复设计和开发沟通成本。"
       ]
     },
     {
-      period: "2021 - 2024",
+      period: "2021.09 - 2024.06",
       company: "天津大学",
       role: "学生",
       tags: ["计算机科学", "数据结构", "算法", "人机交互"],
@@ -730,6 +852,7 @@ const ExperienceSection = () => {
     const observer = new IntersectionObserver((entries) => {
       if (!entries[0].isIntersecting) {
         setCurrentIndex(0);
+        experienceAutoStoppedRef.current = false;
         if (scrollRef.current) {
           scrollRef.current.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
         }
@@ -738,6 +861,14 @@ const ExperienceSection = () => {
     observer.observe(sectionEl);
     return () => observer.disconnect();
   }, []);
+
+  const isDesktopExperienceView = () => window.matchMedia("(min-width: 768px)").matches;
+
+  const stopExperienceAutoCarousel = () => {
+    if (isDesktopExperienceView() && !experienceAutoScrollRef.current) {
+      experienceAutoStoppedRef.current = true;
+    }
+  };
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
@@ -753,8 +884,11 @@ const ExperienceSection = () => {
     setIsMobileExperienceScrolled((current) => current === scrolled ? current : scrolled);
   };
 
-  const scrollTo = (index: number) => {
+  const scrollTo = (index: number, userInitiated = true) => {
     if (!scrollRef.current) return;
+    if (userInitiated) {
+      stopExperienceAutoCarousel();
+    }
     const target = scrollRef.current;
     const child = target.children[0] as HTMLElement;
     const gap = window.innerWidth >= 1024 ? 32 : window.innerWidth >= 768 ? 24 : 16;
@@ -765,6 +899,7 @@ const ExperienceSection = () => {
 
   const handleDesktopDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!scrollRef.current) return;
+    stopExperienceAutoCarousel();
     dragStartRef.current = {
       x: e.clientX,
       scrollLeft: scrollRef.current.scrollLeft,
@@ -790,6 +925,54 @@ const ExperienceSection = () => {
 
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === experiences.length - 1;
+
+  useEffect(() => {
+    const sectionEl = document.getElementById("experience");
+    if (!sectionEl) return;
+
+    let intervalId: number | undefined;
+
+    const stopInterval = () => {
+      if (intervalId) {
+        window.clearInterval(intervalId);
+        intervalId = undefined;
+      }
+    };
+
+    const startInterval = () => {
+      if (intervalId || experienceAutoStoppedRef.current || !isDesktopExperienceView()) return;
+      intervalId = window.setInterval(() => {
+        if (experienceAutoStoppedRef.current || !isDesktopExperienceView()) {
+          stopInterval();
+          return;
+        }
+        experienceAutoScrollRef.current = true;
+        setCurrentIndex((current) => {
+          const next = (current + 1) % experiences.length;
+          scrollTo(next, false);
+          return next;
+        });
+        window.setTimeout(() => {
+          experienceAutoScrollRef.current = false;
+        }, 700);
+      }, 3200);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        startInterval();
+      } else {
+        stopInterval();
+      }
+    }, { threshold: 0.65 });
+
+    observer.observe(sectionEl);
+
+    return () => {
+      observer.disconnect();
+      stopInterval();
+    };
+  }, []);
 
   return (
     <SectionWrapper id="experience" className="bg-zinc-950 text-zinc-200">
@@ -875,12 +1058,13 @@ const ExperienceSection = () => {
             onMouseMove={handleDesktopDragMove}
             onMouseUp={handleDesktopDragEnd}
             onMouseLeave={handleDesktopDragEnd}
+            onWheel={stopExperienceAutoCarousel}
             className="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory hide-scrollbar items-center gap-4 md:gap-6 lg:gap-8 w-full md:px-0 left-0 select-none"
           >
             {experiences.map((exp, i) => (
               <div 
                 key={i} 
-                onClick={() => scrollTo(i)}
+                onClick={() => scrollTo(i, true)}
                 className={`snap-start shrink-0 w-[85%] md:w-[85%] h-full md:h-[calc(100%-2rem)] max-h-[600px] bg-zinc-900 rounded-3xl p-6 pt-8 pb-4 md:p-10 lg:p-14 flex flex-col md:flex-row ring-1 ring-inset ring-zinc-800 relative overflow-hidden shadow-xl transition-colors duration-300 ${
                   i === currentIndex ? "cursor-default" : "cursor-pointer hover:bg-zinc-800/80"
                 }`}
@@ -901,8 +1085,8 @@ const ExperienceSection = () => {
               </div>
 
               {/* Right List (Scrollable on internal content) */}
-              <div className="flex-1 md:w-[65%] lg:w-[70%] overflow-hidden md:border-l md:border-zinc-800 md:pl-8 lg:pl-16 relative z-10 pr-2 [mask-image:linear-gradient(to_bottom,black_75%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_75%,transparent_100%)] md:[mask-image:none] md:[WebkitMaskImage:none]">
-                <div className="h-full overflow-y-auto hide-scrollbar pb-16 md:pb-0">
+              <div className="flex-1 md:w-[65%] lg:w-[70%] overflow-hidden md:border-l md:border-zinc-800 md:pl-8 lg:pl-16 relative z-10 pr-2 [mask-image:linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_0%,black_78%,transparent_100%)]">
+                <div className="h-full overflow-y-auto hide-scrollbar pb-16 md:pb-12">
                   <ul className="space-y-4 md:space-y-6 lg:space-y-8 text-zinc-300">
                     {exp.details.map((detail, j) => (
                       <li key={j} className="flex items-start">
@@ -926,7 +1110,7 @@ const ExperienceSection = () => {
           {experiences.map((_, i) => (
             <div
               key={i}
-              onClick={() => scrollTo(i)}
+              onClick={() => scrollTo(i, true)}
               className={`flex-1 h-full rounded-full cursor-pointer transition-colors duration-300 ${i === currentIndex ? 'bg-zinc-500' : 'bg-zinc-800 hover:bg-zinc-700'}`}
             />
           ))}
