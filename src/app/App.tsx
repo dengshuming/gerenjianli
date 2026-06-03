@@ -535,7 +535,7 @@ const ProjectsSection = () => {
   }, [selectedProject]);
 
   useEffect(() => {
-    if (selectedProject === null || !isMobileProjectView()) return;
+    if (selectedProject === null) return;
 
     projectModalAutoStoppedRef.current = false;
     const scroller = projectModalScrollRef.current;
@@ -556,7 +556,7 @@ const ProjectsSection = () => {
           return;
         }
 
-        scroller.scrollTop += 0.8;
+        scroller.scrollTop += isMobileProjectView() ? 0.8 : 1;
       }, 24);
     }, 900);
 
@@ -809,7 +809,7 @@ const ExperienceSection = () => {
 
   const experiences = [
     {
-      period: "2024.3 - 2026.6",
+      period: "2024.03 - 2026.06",
       company: "深圳益邦阳光有限公司",
       role: "AI项目经理助理",
       tags: ["规则撰写", "团队培训", "质检验收", "bad case"],
@@ -1321,7 +1321,7 @@ const ContactSection = () => {
 
 export default function App() {
   return (
-    <div className="bg-zinc-950 text-white font-sans selection:bg-zinc-800 selection:text-white h-[100dvh] w-full overflow-y-auto snap-y snap-mandatory scroll-smooth scroll-pt-[148px] md:scroll-pt-[130px] relative overflow-x-hidden hide-scrollbar">
+    <div className="bg-zinc-950 text-white font-sans selection:bg-zinc-800 selection:text-white h-[100dvh] w-full overflow-y-auto snap-y snap-mandatory scroll-smooth relative overflow-x-hidden hide-scrollbar">
       <style dangerouslySetInnerHTML={{ __html: shimmerStyles }} />
       <Navbar />
       <div className="w-full relative">
