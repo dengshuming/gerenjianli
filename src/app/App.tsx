@@ -941,6 +941,15 @@ const ExperienceSection = () => {
 
     const startInterval = () => {
       if (intervalId || experienceAutoStoppedRef.current || !isDesktopExperienceView()) return;
+      window.setTimeout(() => {
+        if (!experienceAutoStoppedRef.current && isDesktopExperienceView()) {
+          experienceAutoScrollRef.current = true;
+          scrollTo(1, false);
+          window.setTimeout(() => {
+            experienceAutoScrollRef.current = false;
+          }, 700);
+        }
+      }, 900);
       intervalId = window.setInterval(() => {
         if (experienceAutoStoppedRef.current || !isDesktopExperienceView()) {
           stopInterval();
@@ -1064,7 +1073,11 @@ const ExperienceSection = () => {
             onMouseMove={handleDesktopDragMove}
             onMouseUp={handleDesktopDragEnd}
             onMouseLeave={handleDesktopDragEnd}
-            onWheel={stopExperienceAutoCarousel}
+            onWheel={(e) => {
+              if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+                stopExperienceAutoCarousel();
+              }
+            }}
             className="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory hide-scrollbar items-center gap-4 md:gap-6 lg:gap-8 w-full md:px-0 left-0 select-none"
           >
             {experiences.map((exp, i) => (
