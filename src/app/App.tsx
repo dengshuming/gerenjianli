@@ -809,7 +809,7 @@ const ExperienceSection = () => {
 
   const experiences = [
     {
-      period: "2024.7 - 2026.6",
+      period: "2024.3 - 2026.6",
       company: "深圳益邦阳光有限公司",
       role: "AI项目经理助理",
       tags: ["规则撰写", "团队培训", "质检验收", "bad case"],
@@ -960,6 +960,12 @@ const ExperienceSection = () => {
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
+        experienceAutoStoppedRef.current = false;
+        experienceAutoScrollRef.current = true;
+        scrollTo(0, false);
+        window.setTimeout(() => {
+          experienceAutoScrollRef.current = false;
+        }, 350);
         startInterval();
       } else {
         stopInterval();
@@ -1171,7 +1177,8 @@ const ExperienceSection = () => {
 };
 
 const ContactSection = () => {
-  const [contactFeedback, setContactFeedback] = useState<{ label: string; message: string } | null>(null);
+  const [copiedContact, setCopiedContact] = useState<string | null>(null);
+  const [copyToast, setCopyToast] = useState("");
   const contacts = [
     { label: "邮箱", value: "hi@dengshuming.com", icon: Mail, action: "copy", copyValue: "hi@dengshuming.com" },
     { label: "电话", value: "153-0790-1581", icon: Phone, action: "phone", copyValue: "153-0790-1581" },
@@ -1198,19 +1205,23 @@ const ContactSection = () => {
   const handleContactClick = async (contact: typeof contacts[number]) => {
     if (contact.action === "copy" && contact.copyValue) {
       await copyText(contact.copyValue);
-      setContactFeedback({ label: contact.label, message: "已复制" });
+      setCopiedContact(contact.label);
+      setCopyToast(`${contact.label}已复制`);
       window.setTimeout(() => {
-        setContactFeedback(null);
-      }, 1500);
+        setCopiedContact(null);
+        setCopyToast("");
+      }, 1800);
       return;
     }
 
     if (contact.action === "phone" && contact.copyValue) {
       await copyText(contact.copyValue);
-      setContactFeedback({ label: contact.label, message: "已复制" });
+      setCopiedContact(contact.label);
+      setCopyToast(`${contact.label}已复制`);
       window.setTimeout(() => {
-        setContactFeedback(null);
-      }, 1500);
+        setCopiedContact(null);
+        setCopyToast("");
+      }, 1800);
 
       const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
       if (isMobile) {
@@ -1222,19 +1233,11 @@ const ContactSection = () => {
     }
 
     if (contact.action === "link" && contact.href) {
-      setContactFeedback({ label: contact.label, message: "打开中" });
-      window.setTimeout(() => {
-        setContactFeedback(null);
-      }, 1500);
       window.open(contact.href, "_blank", "noopener,noreferrer");
       return;
     }
 
     if (contact.action === "download" && contact.href) {
-      setContactFeedback({ label: contact.label, message: "下载中" });
-      window.setTimeout(() => {
-        setContactFeedback(null);
-      }, 1500);
       const link = document.createElement("a");
       link.href = contact.href;
       link.download = "邓述明 - AI数据训练师-15307901581.pdf";
@@ -1268,7 +1271,7 @@ const ContactSection = () => {
                     handleContactClick(contact);
                   }
                 }}
-                className="relative overflow-hidden bg-zinc-900 rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col items-center justify-center hover:bg-zinc-800 transition-all duration-300 cursor-pointer shadow-xl ring-1 ring-inset ring-transparent hover:ring-zinc-700 w-full group"
+                className="bg-zinc-900 rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col items-center justify-center hover:bg-zinc-800 transition-all duration-300 cursor-pointer shadow-xl ring-1 ring-inset ring-transparent hover:ring-zinc-700 w-full group"
               >
                 <div className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0 mb-4 md:mb-5 transition-all duration-500 group-hover:scale-110 group-hover:border-zinc-600">
                   <contact.icon className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-zinc-500 transition-colors duration-300 group-hover:text-white" />
@@ -1276,20 +1279,9 @@ const ContactSection = () => {
                 <div className="text-center flex flex-col justify-center min-w-0">
                   <h4 className="text-white text-base md:text-lg lg:text-xl font-medium mb-1.5">{contact.label}</h4>
                   <p className="text-zinc-400 text-xs md:text-sm lg:text-base transition-colors group-hover:text-zinc-300 truncate">
-                    {contact.value}
+                    {copiedContact === contact.label ? "已复制" : contact.value}
                   </p>
                 </div>
-                {contactFeedback?.label === contact.label && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.94 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="absolute inset-0 z-20 flex items-center justify-center bg-zinc-950/86 backdrop-blur-sm"
-                  >
-                    <span className="rounded-full border border-zinc-700 bg-zinc-900/95 px-5 py-2 text-sm md:text-base font-medium text-white shadow-xl">
-                      {contactFeedback.message}
-                    </span>
-                  </motion.div>
-                )}
               </motion.div>
             ))}
           </div>
@@ -1299,13 +1291,24 @@ const ContactSection = () => {
       <div className="absolute bottom-6 left-0 w-full text-center text-zinc-600 text-sm font-mono tracking-wider pointer-events-none hidden md:block z-10">
         © 2026 DACHENGZI
       </div>
+
+      {copyToast && (
+        <motion.div
+          initial={{ opacity: 0, y: 18, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 18, scale: 0.96 }}
+          className="fixed left-1/2 bottom-[calc(2rem+env(safe-area-inset-bottom))] z-[120] -translate-x-1/2 rounded-full border border-zinc-700 bg-zinc-900/95 px-5 py-3 text-sm font-medium text-white shadow-2xl backdrop-blur-md"
+        >
+          {copyToast}
+        </motion.div>
+      )}
     </SectionWrapper>
   );
 };
 
 export default function App() {
   return (
-    <div className="bg-zinc-950 text-white font-sans selection:bg-zinc-800 selection:text-white h-[100dvh] w-full overflow-y-auto snap-y snap-mandatory scroll-smooth relative overflow-x-hidden hide-scrollbar">
+    <div className="bg-zinc-950 text-white font-sans selection:bg-zinc-800 selection:text-white h-[100dvh] w-full overflow-y-auto snap-y snap-mandatory scroll-smooth scroll-pt-[148px] md:scroll-pt-[130px] relative overflow-x-hidden hide-scrollbar">
       <style dangerouslySetInnerHTML={{ __html: shimmerStyles }} />
       <Navbar />
       <div className="w-full relative">
