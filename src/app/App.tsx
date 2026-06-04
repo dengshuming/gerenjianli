@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Mail, FileText, ArrowUpRight, Database, Box, Layers, BrainCircuit, Activity, Network, ChevronLeft, ChevronRight, X, Phone, Globe } from "lucide-react";
 import profilePhoto from "../imports/profile-photo-data";
 
@@ -231,7 +231,7 @@ const HeroSection = () => {
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="hidden md:flex text-lg md:text-2xl lg:text-3xl font-medium tracking-wide w-full justify-center"
             >
-              <span className="text-shimmer inline-block">AI项目经理助理 · 数据规则设计 · 模型落地执行</span>
+              <span className="text-shimmer inline-block">AI训练师 · 数据规则设计 · 模型落地执行</span>
             </motion.div>
             
             {/* Mobile Stacked Subtitles (One per line) */}
@@ -239,7 +239,7 @@ const HeroSection = () => {
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="md:hidden flex flex-col items-center space-y-3 w-full mt-2"
             >
-              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">AI项目经理助理</span>
+              <span className="inline-block text-base font-medium tracking-wide text-zinc-300">AI训练师</span>
               <span className="inline-block text-base font-medium tracking-wide text-zinc-300">数据规则设计</span>
               <span className="inline-block text-base font-medium tracking-wide text-zinc-300">模型落地执行</span>
             </motion.div>
@@ -816,7 +816,7 @@ const ExperienceSection = () => {
     {
       period: "2024.03 - 2026.06",
       company: "深圳益邦阳光有限公司",
-      role: "AI项目经理助理",
+      role: "AI训练师",
       tags: ["规则撰写", "团队培训", "质检验收", "bad case"],
       details: [
         "参与公司储能业务AI项目落地，负责客服消息分流、售后问答、多模态PO识别三个方向的数据工作，覆盖需求拆解、规则制定、样本构建到质检交付的完整流程。",
@@ -1196,7 +1196,7 @@ const ExperienceSection = () => {
 
 const ContactSection = () => {
   const [copiedContact, setCopiedContact] = useState<string | null>(null);
-  const [copyToast, setCopyToast] = useState("");
+  const copyTimerRef = useRef<number | null>(null);
   const contacts = [
     { label: "邮箱", value: "hi@dengshuming.com", icon: Mail, action: "copy", copyValue: "hi@dengshuming.com" },
     { label: "电话", value: "153-0790-1581", icon: Phone, action: "phone", copyValue: "153-0790-1581" },
@@ -1223,23 +1223,27 @@ const ContactSection = () => {
   const handleContactClick = async (contact: typeof contacts[number]) => {
     if (contact.action === "copy" && contact.copyValue) {
       await copyText(contact.copyValue);
+      if (copyTimerRef.current) {
+        window.clearTimeout(copyTimerRef.current);
+      }
       setCopiedContact(contact.label);
-      setCopyToast(`${contact.label}已复制`);
-      window.setTimeout(() => {
+      copyTimerRef.current = window.setTimeout(() => {
         setCopiedContact(null);
-        setCopyToast("");
-      }, 1800);
+        copyTimerRef.current = null;
+      }, 1500);
       return;
     }
 
     if (contact.action === "phone" && contact.copyValue) {
       await copyText(contact.copyValue);
+      if (copyTimerRef.current) {
+        window.clearTimeout(copyTimerRef.current);
+      }
       setCopiedContact(contact.label);
-      setCopyToast(`${contact.label}已复制`);
-      window.setTimeout(() => {
+      copyTimerRef.current = window.setTimeout(() => {
         setCopiedContact(null);
-        setCopyToast("");
-      }, 1800);
+        copyTimerRef.current = null;
+      }, 1500);
 
       const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
       if (isMobile) {
@@ -1265,6 +1269,14 @@ const ContactSection = () => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) {
+        window.clearTimeout(copyTimerRef.current);
+      }
+    };
+  }, []);
+
   return (
     <SectionWrapper id="contact" className="bg-zinc-950 text-zinc-200">
       <div className="flex flex-col h-full w-full">
@@ -1289,17 +1301,34 @@ const ContactSection = () => {
                     handleContactClick(contact);
                   }
                 }}
-                className="bg-zinc-900 rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col items-center justify-center hover:bg-zinc-800 transition-all duration-300 cursor-pointer shadow-xl ring-1 ring-inset ring-transparent hover:ring-zinc-700 w-full group"
+                className="relative bg-zinc-900 rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col items-center justify-center hover:bg-zinc-800 transition-all duration-300 cursor-pointer shadow-xl ring-1 ring-inset ring-transparent hover:ring-zinc-700 w-full group overflow-hidden"
               >
-                <div className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0 mb-4 md:mb-5 transition-all duration-500 group-hover:scale-110 group-hover:border-zinc-600">
-                  <contact.icon className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-zinc-500 transition-colors duration-300 group-hover:text-white" />
+                <div className={`flex flex-col items-center justify-center min-w-0 transition-all duration-300 ${copiedContact === contact.label ? "blur-sm opacity-35 scale-95" : ""}`}>
+                  <div className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 rounded-full bg-zinc-950 border border-zinc-800 flex items-center justify-center shrink-0 mb-4 md:mb-5 transition-all duration-500 group-hover:scale-110 group-hover:border-zinc-600">
+                    <contact.icon className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-zinc-500 transition-colors duration-300 group-hover:text-white" />
+                  </div>
+                  <div className="text-center flex flex-col justify-center min-w-0">
+                    <h4 className="text-white text-base md:text-lg lg:text-xl font-medium mb-1.5">{contact.label}</h4>
+                    <p className="text-zinc-400 text-xs md:text-sm lg:text-base transition-colors group-hover:text-zinc-300 truncate">
+                      {contact.value}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-center flex flex-col justify-center min-w-0">
-                  <h4 className="text-white text-base md:text-lg lg:text-xl font-medium mb-1.5">{contact.label}</h4>
-                  <p className="text-zinc-400 text-xs md:text-sm lg:text-base transition-colors group-hover:text-zinc-300 truncate">
-                    {copiedContact === contact.label ? "已复制" : contact.value}
-                  </p>
-                </div>
+                <AnimatePresence>
+                  {copiedContact === contact.label && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 48, scale: 0.94 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -12, scale: 0.98 }}
+                      transition={{ duration: 0.32, ease: "easeOut" }}
+                      className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+                    >
+                      <span className="rounded-full border border-zinc-600/80 bg-zinc-950/95 px-5 py-2 text-sm md:text-base font-semibold text-white shadow-2xl backdrop-blur-md whitespace-nowrap">
+                        {contact.label}已复制
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             ))}
           </div>
@@ -1310,16 +1339,6 @@ const ContactSection = () => {
         © 2026 DACHENGZI
       </div>
 
-      {copyToast && (
-        <motion.div
-          initial={{ opacity: 0, y: 18, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 18, scale: 0.96 }}
-          className="fixed left-1/2 bottom-[calc(2rem+env(safe-area-inset-bottom))] z-[120] -translate-x-1/2 rounded-full border border-zinc-700 bg-zinc-900/95 px-5 py-3 text-sm font-medium text-white shadow-2xl backdrop-blur-md"
-        >
-          {copyToast}
-        </motion.div>
-      )}
     </SectionWrapper>
   );
 };
