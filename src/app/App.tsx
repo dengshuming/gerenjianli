@@ -407,6 +407,11 @@ const ProjectsSection = () => {
     projectModalAutoStoppedRef.current = true;
   };
 
+  const getProjectPeriod = (scale: string) => {
+    const period = scale.match(/\d{4}\.\d{2}\s*-\s*\d{4}\.\d{2}/);
+    return period ? period[0] : scale;
+  };
+
   const scrollTo = (index: number, userInitiated = true) => {
     if (!scrollRef.current) return;
     if (userInitiated) {
@@ -739,7 +744,7 @@ const ProjectsSection = () => {
             <div className="flex items-start justify-between gap-4 mb-5 shrink-0">
               <div className="min-w-0">
                 <span className="inline-flex px-3 py-1 rounded-full bg-zinc-950 border border-zinc-800 text-zinc-400 text-xs font-mono mb-3">
-                  {projects[selectedProject].type} · {projects[selectedProject].scale}
+                  {getProjectPeriod(projects[selectedProject].scale)}
                 </span>
                 <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-2">
                   {projects[selectedProject].title}
