@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Mail, FileText, ArrowUpRight, Database, Box, Layers, BrainCircuit, Activity, Network, ChevronLeft, ChevronRight, X, Phone, Globe } from "lucide-react";
 import profilePhoto from "../imports/profile-photo-data";
-import wechatQr from "../imports/wechat-qr.png";
 
 // ---------------------------------------------------------
 // Global Styles
@@ -1330,17 +1329,6 @@ const ContactSection = () => {
                 </AnimatePresence>
               </motion.div>
             ))}
-          </div>
-          <div className="mt-auto pt-5 md:pt-8 flex w-full flex-col items-center justify-center">
-            <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-white p-2 shadow-2xl shadow-black/30">
-              <img
-                src={wechatQr}
-                alt="微信二维码"
-                className="h-24 w-24 md:h-32 md:w-32 object-contain"
-                draggable={false}
-              />
-            </div>
-            <p className="mt-2 text-xs md:text-sm text-zinc-500 tracking-wide">加个微信吧～</p>
           </div>
         </div>
       </div>
