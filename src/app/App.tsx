@@ -1345,13 +1345,26 @@ const ContactSection = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-6 left-0 w-full text-center text-zinc-600 text-sm font-mono tracking-wider pointer-events-none hidden md:block z-10">
-        © 2026 DACHENGZI
-      </div>
+      <FooterLegal className="absolute bottom-6 left-0 hidden w-full px-4 text-center text-zinc-600 text-sm font-mono tracking-wider pointer-events-none md:flex z-10" />
 
     </SectionWrapper>
   );
 };
+
+const FooterLegal = ({ className = "" }: { className?: string }) => (
+  <div className={`flex flex-wrap items-center justify-center gap-x-2 gap-y-1 ${className}`}>
+    <span>© 2026 DACHENGZI</span>
+    <span className="text-zinc-700">·</span>
+    <a
+      href="https://beian.miit.gov.cn/"
+      target="_blank"
+      rel="noreferrer"
+      className="pointer-events-auto transition-colors hover:text-zinc-300"
+    >
+      粤ICP备2026069686号-1
+    </a>
+  </div>
+);
 
 export default function App() {
   return (
@@ -1367,9 +1380,7 @@ export default function App() {
       </div>
       
       {/* Mobile Fixed Footer */}
-      <div className="md:hidden fixed bottom-4 left-0 w-full text-center text-zinc-600 text-[10px] font-mono tracking-widest pointer-events-none z-50 mix-blend-difference">
-        © 2026 DACHENGZI
-      </div>
+      <FooterLegal className="md:hidden fixed bottom-4 left-0 w-full px-4 text-center text-zinc-600 text-[10px] font-mono tracking-widest pointer-events-none z-50 mix-blend-difference" />
     </div>
   );
 }
