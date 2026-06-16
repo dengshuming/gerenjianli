@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
-import { ChevronDown, Mail, FileText, ArrowUpRight, Database, Box, Layers, BrainCircuit, Activity, Network, ChevronLeft, ChevronRight, X, Phone, Globe } from "lucide-react";
+import { ChevronDown, Mail, FileText, ArrowUpRight, Database, Box, Layers, BrainCircuit, Activity, Network, ChevronLeft, ChevronRight, BookOpen, X, Phone, Globe } from "lucide-react";
 import profilePhoto from "../imports/profile-photo-data";
 
 // ---------------------------------------------------------
@@ -95,6 +95,39 @@ const SectionHeader = ({ subtitle, title, desc = null, rightElement = null }: { 
     )}
   </div>
 );
+
+const useAutoScrollOverflow = (activeKey: unknown, interval = 1500, step = 26) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeKey === null || activeKey === undefined) return;
+    const target = ref.current;
+    if (!target) return;
+    let scrollTimer: number | null = null;
+
+    target.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+
+    const startTimer = window.setTimeout(() => {
+      if (target.scrollHeight <= target.clientHeight) return;
+
+      scrollTimer = window.setInterval(() => {
+        const maxScroll = target.scrollHeight - target.clientHeight;
+        if (target.scrollTop >= maxScroll - 2) {
+          target.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          target.scrollBy({ top: step, behavior: "smooth" });
+        }
+      }, interval);
+    }, 650);
+
+    return () => {
+      window.clearTimeout(startTimer);
+      if (scrollTimer !== null) window.clearInterval(scrollTimer);
+    };
+  }, [activeKey, interval, step]);
+
+  return ref;
+};
 
 const AnimatedTitle = ({ text, className, delay = 0 }: { text: string, className: string, delay?: number }) => (
   <motion.div
@@ -324,9 +357,9 @@ const AboutSection = () => {
                 className="space-y-4 h-full overflow-y-auto hide-scrollbar pb-10 md:pb-0"
               >
                 {[
-                  "我是一名AI训练师/数据组长，参与过意图分类、RAG知识库、SFT问答、多模态文档理解、Agent轨迹等多类型数据项目，能把算法需求转化为可落地的标注规则和质检标准。",
-                  "由标注员晋升数据组长，统筹8人执行团队，能够根据项目风险设计分层抽检、双人标注、高风险字段100%核查等差异化质量策略，所负责项目抽检合格率稳定在93%-97%。",
-                  "善于使用AI工具提升团队效率：基于Dify搭建多模型候选回答批量收集流程，也借助Claude Code编写Agent轨迹格式预检脚本，让质检员把精力集中在推理逻辑和事实一致性上。"
+                  "具备意图分类、RAG知识库、SFT问答、多模态文档理解与Agent轨迹等多类型AI数据项目经验，能够将算法需求拆解为清晰、可执行、可质检的数据规则。",
+                  "具备数据团队管理与质量体系建设能力，熟悉分层抽检、复核、双人标注和高风险字段全量核查等策略，能够保障多项目并行下的交付稳定性。",
+                  "具备AI工具驱动的数据生产提效能力，能够通过候选回答批处理、轨迹格式预检等方式前置重复性检查，让团队更聚焦规则判断、推理逻辑和事实一致性。"
                 ].map((text, i) => (
                   <motion.p 
                     key={i}
@@ -374,46 +407,99 @@ const AboutSection = () => {
 const ProjectsSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const desktopProjectScrollRef = useRef<HTMLDivElement>(null);
+  const mobileProjectScrollRef = useRef<HTMLDivElement>(null);
+  const projectAutoPreviewRef = useRef(false);
+  const projectDragStartRef = useRef<{ x: number; scrollLeft: number } | null>(null);
+  const projectDidDragRef = useRef(false);
+  const projectDetailScrollRef = useAutoScrollOverflow(selectedProject, 1500, 28);
+  const [isProjectsInView, setIsProjectsInView] = useState(false);
   const projectModalSections = ["项目背景", "我的角色", "核心价值"];
 
   useEffect(() => {
     const sectionEl = document.getElementById("projects");
     if (!sectionEl) return;
     const observer = new IntersectionObserver((entries) => {
-      if (!entries[0].isIntersecting) {
+      const isIntersecting = entries[0].isIntersecting;
+      setIsProjectsInView(isIntersecting);
+      if (!isIntersecting) {
+        projectAutoPreviewRef.current = false;
         setActiveIndex(0);
-        if (scrollRef.current) {
-          scrollRef.current.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
-        }
+        desktopProjectScrollRef.current?.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
+        mobileProjectScrollRef.current?.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
       }
     }, { threshold: 0 });
     observer.observe(sectionEl);
     return () => observer.disconnect();
   }, []);
 
-  const scrollTo = (index: number) => {
-    if (!scrollRef.current) return;
-    const target = scrollRef.current;
-    const child = target.children[0] as HTMLElement;
-    const gap = 16;
-    const cardWidthWithGap = child.offsetWidth + gap;
-    target.scrollTo({ left: index * cardWidthWithGap, behavior: 'smooth' });
+  const getProjectScrollTarget = () => {
+    if (typeof window !== "undefined" && window.innerWidth >= 768) return desktopProjectScrollRef.current;
+    return mobileProjectScrollRef.current;
+  };
+
+  const scrollTo = (index: number, behavior: ScrollBehavior = 'smooth') => {
+    const target = getProjectScrollTarget();
+    if (!target) return;
+    const child = target.children[index] as HTMLElement | undefined;
+    if (!child) return;
+    const shouldCenter = typeof window !== "undefined" && window.innerWidth >= 768;
+    const left = shouldCenter
+      ? child.offsetLeft - (target.clientWidth - child.offsetWidth) / 2
+      : child.offsetLeft;
+    target.scrollTo({ left: Math.max(0, left), behavior });
     setActiveIndex(index);
   };
 
   const handleMobileProjectClick = (index: number) => {
-    const target = scrollRef.current;
-    const child = target?.children[0] as HTMLElement | undefined;
-    const currentIndex = target && child
-      ? Math.round(target.scrollLeft / (child.offsetWidth + 16))
-      : activeIndex;
-
-    if (index === currentIndex) {
+    if (index === activeIndex) {
       setSelectedProject(index);
-    } else {
-      scrollTo(index);
+      return;
     }
+    scrollTo(index);
+  };
+
+  const handleProjectClick = (index: number) => {
+    if (projectDidDragRef.current) {
+      projectDidDragRef.current = false;
+      return;
+    }
+    if (index === activeIndex) {
+      setSelectedProject(index);
+      return;
+    }
+    scrollTo(index);
+  };
+
+  const handleProjectDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!desktopProjectScrollRef.current) return;
+    projectDidDragRef.current = false;
+    projectDragStartRef.current = {
+      x: e.clientX,
+      scrollLeft: desktopProjectScrollRef.current.scrollLeft,
+    };
+  };
+
+  const handleProjectDragMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!desktopProjectScrollRef.current || !projectDragStartRef.current) return;
+    const delta = e.clientX - projectDragStartRef.current.x;
+    if (Math.abs(delta) > 4) projectDidDragRef.current = true;
+    desktopProjectScrollRef.current.scrollLeft = projectDragStartRef.current.scrollLeft - delta;
+  };
+
+  const handleProjectDragEnd = () => {
+    if (!desktopProjectScrollRef.current || !projectDragStartRef.current) return;
+    const target = desktopProjectScrollRef.current;
+    const children = Array.from(target.children) as HTMLElement[];
+    const center = target.scrollLeft + target.clientWidth / 2;
+    const index = children.reduce((closestIndex, child, childIndex) => {
+      const childCenter = child.offsetLeft + child.offsetWidth / 2;
+      const closest = children[closestIndex];
+      const closestCenter = closest.offsetLeft + closest.offsetWidth / 2;
+      return Math.abs(childCenter - center) < Math.abs(closestCenter - center) ? childIndex : closestIndex;
+    }, 0);
+    projectDragStartRef.current = null;
+    scrollTo(index);
   };
 
   const projects = [
@@ -481,8 +567,33 @@ const ProjectsSection = () => {
         { title: "核心价值", items: ["作为标注员完成主图、海报、场景图、细节图和信息图等图片类型的多维标签标注及结构化描述。", "结合UI设计经验，从视觉设计意图角度梳理图片类型边界与典型Bad Case，如主图与海报图的功能差异，并整理纳入内部操作手册。", "参与团队4批次、约20,000张图片交付，个人抽检合格率达到97%，因质量表现与规则贡献于2025.06晋升数据组长。"] }
       ],
       icon: Layers
+    },
+    {
+      title: "小红书图文笔记标签体系",
+      type: "图文内容理解",
+      scale: "30万条 / 2023.04-2024.06",
+      desc: "参与小红书图文笔记标签体系优化，覆盖内容类目、主题标签、内容意图、图文一致性和低质风险等字段。",
+      tags: ["标签体系", "图文一致性", "低质风险", "质检返修"],
+      detailSections: [
+        { title: "项目背景", items: ["项目面向小红书图文笔记内容理解，需要综合封面图、图片组、标题、正文和话题标签，完成多字段标注与质量复核。"] },
+        { title: "我的角色", items: ["图文内容标注｜同组样本抽检｜返修跟进｜高频错误整理｜判断口径统一"] },
+        { title: "核心价值", items: ["完成内容类目、主题标签、内容意图、场景标签、图文一致性、低质风险及笔记摘要等字段标注。", "后期参与同组样本抽检与返修跟进，重点检查主类目判断、图文一致性和低质风险字段。", "参与约30万条图文笔记数据的3批次交付，个人累计完成约15,000条标注，参与约5,000条样本抽检与返修，项目整体抽检通过率达95%以上。"] }
+      ],
+      icon: BookOpen
     }
   ];
+
+  useEffect(() => {
+    if (!isProjectsInView || selectedProject !== null || projectAutoPreviewRef.current) return;
+    projectAutoPreviewRef.current = true;
+    const timers: number[] = [];
+    projects.forEach((_, index) => {
+      if (index === 0) return;
+      timers.push(window.setTimeout(() => scrollTo(index), index * 520));
+    });
+    timers.push(window.setTimeout(() => scrollTo(0), projects.length * 520 + 520));
+    return () => timers.forEach((timer) => window.clearTimeout(timer));
+  }, [isProjectsInView, selectedProject, projects.length]);
 
   return (
     <SectionWrapper id="projects" className="bg-zinc-950 text-zinc-200">
@@ -494,28 +605,44 @@ const ProjectsSection = () => {
         />
 
         {/* Desktop Accordion */}
-        <div className="hidden md:flex flex-row flex-1 min-h-0 w-full gap-4">
+        <div
+          ref={desktopProjectScrollRef}
+          onScroll={(e) => {
+            const target = e.currentTarget;
+            const children = Array.from(target.children) as HTMLElement[];
+            const center = target.scrollLeft + target.clientWidth / 2;
+            const index = children.reduce((closestIndex, child, childIndex) => {
+              const childCenter = child.offsetLeft + child.offsetWidth / 2;
+              const closest = children[closestIndex];
+              const closestCenter = closest.offsetLeft + closest.offsetWidth / 2;
+              return Math.abs(childCenter - center) < Math.abs(closestCenter - center) ? childIndex : closestIndex;
+            }, 0);
+            setActiveIndex((current) => current === index ? current : index);
+          }}
+          onMouseDown={handleProjectDragStart}
+          onMouseMove={handleProjectDragMove}
+          onMouseUp={handleProjectDragEnd}
+          onMouseLeave={handleProjectDragEnd}
+          className="hidden md:flex flex-row flex-1 min-h-0 w-full gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory select-none"
+        >
           {projects.map((project, i) => {
             const isActive = i === activeIndex;
             return (
               <div
                 key={i}
                 onMouseEnter={() => setActiveIndex((current) => current === i ? current : i)}
-                onClick={() => {
-                  setActiveIndex(i);
-                  setSelectedProject(i);
-                }}
-                className={`relative cursor-pointer overflow-hidden rounded-3xl group ring-1 ring-inset transition-[flex,background-color,border-color] duration-300 ease-out
+                onClick={() => handleProjectClick(i)}
+                className={`relative shrink-0 w-[58%] lg:w-[46%] xl:w-[38%] snap-start cursor-pointer overflow-hidden rounded-3xl group ring-1 ring-inset transition-[background-color,border-color] duration-300 ease-out
                   ${isActive 
-                    ? 'flex-[10] ring-zinc-600 bg-zinc-800/60' 
-                    : 'flex-[1.2] ring-zinc-800 bg-zinc-900/30 hover:bg-zinc-800/80 hover:ring-zinc-700'
+                    ? 'ring-zinc-600 bg-zinc-800/60' 
+                    : 'ring-zinc-800 bg-zinc-900/30 hover:bg-zinc-800/80 hover:ring-zinc-700'
                   }`}
               >
                 <div className="absolute top-[-10px] lg:top-[-20px] right-4 lg:right-[-20px] text-[4rem] lg:text-[10rem] leading-none font-black text-white/[0.03] select-none pointer-events-none">
                   0{i + 1}
                 </div>
 
-                <div className={`absolute inset-0 p-6 md:p-8 lg:p-10 transition-opacity duration-500 ease-in-out ${isActive ? 'opacity-100 z-10 delay-300' : 'opacity-0 z-0 pointer-events-none'}`}>
+                <div className="absolute inset-0 p-6 md:p-8 lg:p-10 transition-opacity duration-500 ease-in-out opacity-100 z-10">
                   <div className="w-[300px] md:w-full lg:w-[600px] h-full flex flex-col justify-start">
                     <div className="flex items-center space-x-3 mb-6 lg:mb-8">
                       <span className="px-3 py-1.5 lg:px-4 lg:py-2 bg-zinc-950/80 text-zinc-300 text-xs lg:text-sm font-mono rounded-full flex items-center gap-2 border border-zinc-700">
@@ -547,11 +674,6 @@ const ProjectsSection = () => {
                   </div>
                 </div>
 
-                <div className={`absolute inset-0 flex items-center justify-center p-4 transition-opacity duration-300 ${isActive ? 'opacity-0 z-0 pointer-events-none' : 'opacity-100 z-10 delay-300'}`}>
-                  <div className="whitespace-nowrap text-lg md:text-xl font-bold text-zinc-600 tracking-widest transition-colors duration-300 group-hover:text-zinc-400 md:[writing-mode:vertical-lr] md:[text-orientation:mixed]">
-                    {project.title}
-                  </div>
-                </div>
               </div>
             );
           })}
@@ -570,7 +692,7 @@ const ProjectsSection = () => {
           }}
         >
           <div 
-            ref={scrollRef}
+            ref={mobileProjectScrollRef}
             className="flex flex-row overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 w-full h-full"
             onScroll={(e) => {
               const target = e.currentTarget;
@@ -674,6 +796,7 @@ const ProjectsSection = () => {
             </div>
 
             <div
+              ref={projectDetailScrollRef}
               onWheel={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               className="max-h-[calc(100dvh-206px-env(safe-area-inset-bottom))] md:max-h-[calc(74vh-210px)] overflow-y-auto overscroll-contain hide-scrollbar pr-1 [mask-image:linear-gradient(to_bottom,black_97%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_97%,transparent_100%)]"
@@ -707,9 +830,12 @@ const ProjectsSection = () => {
 const ExperienceSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const dragStartRef = useRef<{ x: number; scrollLeft: number } | null>(null);
+  const experienceAutoPreviewRef = useRef(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeExperience, setActiveExperience] = useState<number | null>(null);
+  const mobileExperienceDetailRef = useAutoScrollOverflow(activeExperience, 1500, 26);
   const [isMobileExperienceScrolled, setIsMobileExperienceScrolled] = useState(false);
+  const [isExperienceInView, setIsExperienceInView] = useState(false);
 
   const experiences = [
     {
@@ -766,7 +892,10 @@ const ExperienceSection = () => {
     const sectionEl = document.getElementById("experience");
     if (!sectionEl) return;
     const observer = new IntersectionObserver((entries) => {
-      if (!entries[0].isIntersecting) {
+      const isIntersecting = entries[0].isIntersecting;
+      setIsExperienceInView(isIntersecting);
+      if (!isIntersecting) {
+        experienceAutoPreviewRef.current = false;
         setCurrentIndex(0);
         if (scrollRef.current) {
           scrollRef.current.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
@@ -776,6 +905,18 @@ const ExperienceSection = () => {
     observer.observe(sectionEl);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (!isExperienceInView || activeExperience !== null || experienceAutoPreviewRef.current) return;
+    experienceAutoPreviewRef.current = true;
+    const timers: number[] = [];
+    experiences.forEach((_, index) => {
+      if (index === 0) return;
+      timers.push(window.setTimeout(() => scrollTo(index), index * 620));
+    });
+    timers.push(window.setTimeout(() => scrollTo(0), experiences.length * 620 + 620));
+    return () => timers.forEach((timer) => window.clearTimeout(timer));
+  }, [activeExperience, experiences.length, isExperienceInView]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
@@ -1004,6 +1145,7 @@ const ExperienceSection = () => {
               </button>
             </div>
             <div
+              ref={mobileExperienceDetailRef}
               onWheel={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               className="max-h-[calc(100dvh-170px-env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain hide-scrollbar pr-1 [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_94%,transparent_100%)]"
