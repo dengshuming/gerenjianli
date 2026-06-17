@@ -407,11 +407,8 @@ const AboutSection = () => {
 const ProjectsSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
-  const desktopProjectScrollRef = useRef<HTMLDivElement>(null);
   const mobileProjectScrollRef = useRef<HTMLDivElement>(null);
   const projectAutoPreviewRef = useRef(false);
-  const projectDragStartRef = useRef<{ x: number; scrollLeft: number } | null>(null);
-  const projectDidDragRef = useRef(false);
   const projectDetailScrollRef = useAutoScrollOverflow(selectedProject, 1500, 28);
   const [isProjectsInView, setIsProjectsInView] = useState(false);
   const projectModalSections = ["项目背景", "我的角色", "核心价值"];
@@ -425,7 +422,6 @@ const ProjectsSection = () => {
       if (!isIntersecting) {
         projectAutoPreviewRef.current = false;
         setActiveIndex(0);
-        desktopProjectScrollRef.current?.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
         mobileProjectScrollRef.current?.scrollTo({ left: 0, behavior: "instant" as ScrollBehavior });
       }
     }, { threshold: 0 });
@@ -433,21 +429,16 @@ const ProjectsSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const getProjectScrollTarget = () => {
-    if (typeof window !== "undefined" && window.innerWidth >= 768) return desktopProjectScrollRef.current;
-    return mobileProjectScrollRef.current;
-  };
-
   const scrollTo = (index: number, behavior: ScrollBehavior = 'smooth') => {
-    const target = getProjectScrollTarget();
+    if (typeof window !== "undefined" && window.innerWidth >= 768) {
+      setActiveIndex(index);
+      return;
+    }
+    const target = mobileProjectScrollRef.current;
     if (!target) return;
     const child = target.children[index] as HTMLElement | undefined;
     if (!child) return;
-    const shouldCenter = typeof window !== "undefined" && window.innerWidth >= 768;
-    const left = shouldCenter
-      ? child.offsetLeft - (target.clientWidth - child.offsetWidth) / 2
-      : child.offsetLeft;
-    target.scrollTo({ left: Math.max(0, left), behavior });
+    target.scrollTo({ left: child.offsetLeft, behavior });
     setActiveIndex(index);
   };
 
@@ -460,45 +451,10 @@ const ProjectsSection = () => {
   };
 
   const handleProjectClick = (index: number) => {
-    if (projectDidDragRef.current) {
-      projectDidDragRef.current = false;
-      return;
-    }
     if (index === activeIndex) {
       setSelectedProject(index);
       return;
     }
-    scrollTo(index);
-  };
-
-  const handleProjectDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!desktopProjectScrollRef.current) return;
-    projectDidDragRef.current = false;
-    projectDragStartRef.current = {
-      x: e.clientX,
-      scrollLeft: desktopProjectScrollRef.current.scrollLeft,
-    };
-  };
-
-  const handleProjectDragMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!desktopProjectScrollRef.current || !projectDragStartRef.current) return;
-    const delta = e.clientX - projectDragStartRef.current.x;
-    if (Math.abs(delta) > 4) projectDidDragRef.current = true;
-    desktopProjectScrollRef.current.scrollLeft = projectDragStartRef.current.scrollLeft - delta;
-  };
-
-  const handleProjectDragEnd = () => {
-    if (!desktopProjectScrollRef.current || !projectDragStartRef.current) return;
-    const target = desktopProjectScrollRef.current;
-    const children = Array.from(target.children) as HTMLElement[];
-    const center = target.scrollLeft + target.clientWidth / 2;
-    const index = children.reduce((closestIndex, child, childIndex) => {
-      const childCenter = child.offsetLeft + child.offsetWidth / 2;
-      const closest = children[closestIndex];
-      const closestCenter = closest.offsetLeft + closest.offsetWidth / 2;
-      return Math.abs(childCenter - center) < Math.abs(closestCenter - center) ? childIndex : closestIndex;
-    }, 0);
-    projectDragStartRef.current = null;
     scrollTo(index);
   };
 
@@ -585,6 +541,7 @@ const ProjectsSection = () => {
 
   useEffect(() => {
     if (!isProjectsInView || selectedProject !== null || projectAutoPreviewRef.current) return;
+    if (typeof window !== "undefined" && window.innerWidth >= 768) return;
     projectAutoPreviewRef.current = true;
     const timers: number[] = [];
     projects.forEach((_, index) => {
@@ -605,26 +562,7 @@ const ProjectsSection = () => {
         />
 
         {/* Desktop Accordion */}
-        <div
-          ref={desktopProjectScrollRef}
-          onScroll={(e) => {
-            const target = e.currentTarget;
-            const children = Array.from(target.children) as HTMLElement[];
-            const center = target.scrollLeft + target.clientWidth / 2;
-            const index = children.reduce((closestIndex, child, childIndex) => {
-              const childCenter = child.offsetLeft + child.offsetWidth / 2;
-              const closest = children[closestIndex];
-              const closestCenter = closest.offsetLeft + closest.offsetWidth / 2;
-              return Math.abs(childCenter - center) < Math.abs(closestCenter - center) ? childIndex : closestIndex;
-            }, 0);
-            setActiveIndex((current) => current === index ? current : index);
-          }}
-          onMouseDown={handleProjectDragStart}
-          onMouseMove={handleProjectDragMove}
-          onMouseUp={handleProjectDragEnd}
-          onMouseLeave={handleProjectDragEnd}
-          className="hidden md:flex flex-row flex-1 min-h-0 w-full gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory select-none"
-        >
+        <div className="hidden md:flex flex-row flex-1 min-h-0 w-full gap-3 lg:gap-4">
           {projects.map((project, i) => {
             const isActive = i === activeIndex;
             return (
@@ -632,17 +570,17 @@ const ProjectsSection = () => {
                 key={i}
                 onMouseEnter={() => setActiveIndex((current) => current === i ? current : i)}
                 onClick={() => handleProjectClick(i)}
-                className={`relative shrink-0 w-[58%] lg:w-[46%] xl:w-[38%] snap-start cursor-pointer overflow-hidden rounded-3xl group ring-1 ring-inset transition-[background-color,border-color] duration-300 ease-out
+                className={`relative cursor-pointer overflow-hidden rounded-3xl group ring-1 ring-inset transition-[flex,background-color,border-color] duration-300 ease-out
                   ${isActive 
-                    ? 'ring-zinc-600 bg-zinc-800/60' 
-                    : 'ring-zinc-800 bg-zinc-900/30 hover:bg-zinc-800/80 hover:ring-zinc-700'
+                    ? 'flex-[8] ring-zinc-600 bg-zinc-800/60' 
+                    : 'flex-[0.95] ring-zinc-800 bg-zinc-900/30 hover:bg-zinc-800/80 hover:ring-zinc-700'
                   }`}
               >
                 <div className="absolute top-[-10px] lg:top-[-20px] right-4 lg:right-[-20px] text-[4rem] lg:text-[10rem] leading-none font-black text-white/[0.03] select-none pointer-events-none">
                   0{i + 1}
                 </div>
 
-                <div className="absolute inset-0 p-6 md:p-8 lg:p-10 transition-opacity duration-500 ease-in-out opacity-100 z-10">
+                <div className={`absolute inset-0 p-6 md:p-8 lg:p-10 transition-opacity duration-500 ease-in-out ${isActive ? 'opacity-100 z-10 delay-300' : 'opacity-0 z-0 pointer-events-none'}`}>
                   <div className="w-[300px] md:w-full lg:w-[600px] h-full flex flex-col justify-start">
                     <div className="flex items-center space-x-3 mb-6 lg:mb-8">
                       <span className="px-3 py-1.5 lg:px-4 lg:py-2 bg-zinc-950/80 text-zinc-300 text-xs lg:text-sm font-mono rounded-full flex items-center gap-2 border border-zinc-700">
@@ -674,6 +612,11 @@ const ProjectsSection = () => {
                   </div>
                 </div>
 
+                <div className={`absolute inset-0 flex items-center justify-center p-4 transition-opacity duration-300 ${isActive ? 'opacity-0 z-0 pointer-events-none' : 'opacity-100 z-10 delay-300'}`}>
+                  <div className="whitespace-nowrap text-lg md:text-xl font-bold text-zinc-600 tracking-widest transition-colors duration-300 group-hover:text-zinc-400 md:[writing-mode:vertical-lr] md:[text-orientation:mixed]">
+                    {project.title}
+                  </div>
+                </div>
               </div>
             );
           })}
@@ -872,18 +815,6 @@ const ExperienceSection = () => {
         "参与需求沟通、竞品分析、页面流程梳理、高保真设计、切图标注和开发交接。",
         "结合Ant Design等后台设计规范，输出表单、列表、筛选、弹窗、数据看板等页面样式，提升一致性和开发效率。",
         "配合产品、开发、测试完成页面落地，沉淀APP端与B端后台基础视觉规范，减少重复设计和开发沟通成本。"
-      ]
-    },
-    {
-      period: "本科",
-      company: "教育背景",
-      role: "本科",
-      tags: ["规则理解", "数据链路", "质量意识", "工具提效"],
-      details: [
-        "具备本科教育背景，持续积累数据规则设计、内容理解、产品体验和团队协作相关能力。",
-        "从UI设计转向AI数据项目后，能够结合产品视角理解业务流程、用户语境和模型落地边界。",
-        "重视规则沉淀、质量闭环和工具提效，适合承担AI数据项目中的规则制定、质检复盘和团队执行管理工作。",
-        "能够把算法需求和业务反馈整理成清晰可执行的标注规范、评测口径和交付标准。"
       ]
     }
   ];
@@ -1292,12 +1223,25 @@ const ContactSection = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-6 left-0 w-full text-center text-zinc-600 text-sm font-mono tracking-wider pointer-events-none hidden md:block z-10">
-        © 2026 DACHENGZI
-      </div>
+      <FooterLegal className="absolute bottom-6 left-0 w-full text-center text-zinc-600 text-sm font-mono tracking-wider pointer-events-none hidden md:flex z-10" />
     </SectionWrapper>
   );
 };
+
+const FooterLegal = ({ className = "" }: { className?: string }) => (
+  <div className={`flex flex-wrap items-center justify-center gap-x-2 gap-y-1 ${className}`}>
+    <span>© 2026 DACHENGZI</span>
+    <span className="text-zinc-700">·</span>
+    <a
+      href="https://beian.miit.gov.cn/"
+      target="_blank"
+      rel="noreferrer"
+      className="pointer-events-auto transition-colors hover:text-zinc-300"
+    >
+      粤ICP备2026069686号-1
+    </a>
+  </div>
+);
 
 export default function App() {
   return (
@@ -1313,9 +1257,7 @@ export default function App() {
       </div>
       
       {/* Mobile Fixed Footer */}
-      <div className="md:hidden fixed bottom-4 left-0 w-full text-center text-zinc-600 text-[10px] font-mono tracking-widest pointer-events-none z-50 mix-blend-difference">
-        © 2026 DACHENGZI
-      </div>
+      <FooterLegal className="md:hidden fixed bottom-4 left-0 w-full text-center text-zinc-600 text-[10px] font-mono tracking-widest pointer-events-none z-50 mix-blend-difference" />
     </div>
   );
 }
