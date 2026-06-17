@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "motion/react";
 import { ChevronDown, Mail, FileText, ArrowUpRight, Database, Box, Layers, BrainCircuit, Activity, Network, ChevronLeft, ChevronRight, BookOpen, X, Phone, Globe } from "lucide-react";
 import profilePhoto from "../imports/profile-photo-data";
@@ -96,37 +96,67 @@ const SectionHeader = ({ subtitle, title, desc = null, rightElement = null }: { 
   </div>
 );
 
-const useAutoScrollOverflow = (activeKey: unknown, interval = 1500, step = 26) => {
+const useAutoScrollOverflow = (activeKey: unknown, speed = 18, startDelay = 450) => {
   const ref = useRef<HTMLDivElement>(null);
+  const startTimerRef = useRef<number | null>(null);
+  const frameRef = useRef<number | null>(null);
+  const lastFrameRef = useRef<number | null>(null);
+  const restartTimerRef = useRef<number | null>(null);
+
+  const stopAutoScroll = useCallback(() => {
+    if (startTimerRef.current !== null) {
+      window.clearTimeout(startTimerRef.current);
+      startTimerRef.current = null;
+    }
+    if (frameRef.current !== null) {
+      window.cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+    }
+    if (restartTimerRef.current !== null) {
+      window.clearTimeout(restartTimerRef.current);
+      restartTimerRef.current = null;
+    }
+    lastFrameRef.current = null;
+  }, []);
 
   useEffect(() => {
     if (activeKey === null || activeKey === undefined) return;
     const target = ref.current;
     if (!target) return;
-    let scrollTimer: number | null = null;
+    stopAutoScroll();
 
     target.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
 
-    const startTimer = window.setTimeout(() => {
+    startTimerRef.current = window.setTimeout(() => {
       if (target.scrollHeight <= target.clientHeight) return;
 
-      scrollTimer = window.setInterval(() => {
+      const tick = (timestamp: number) => {
         const maxScroll = target.scrollHeight - target.clientHeight;
-        if (target.scrollTop >= maxScroll - 2) {
-          target.scrollTo({ top: 0, behavior: "smooth" });
+        if (lastFrameRef.current === null) lastFrameRef.current = timestamp;
+        const delta = timestamp - lastFrameRef.current;
+        lastFrameRef.current = timestamp;
+
+        if (target.scrollTop >= maxScroll - 1) {
+          restartTimerRef.current = window.setTimeout(() => {
+            target.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+            lastFrameRef.current = null;
+            frameRef.current = window.requestAnimationFrame(tick);
+          }, 700);
+          return;
         } else {
-          target.scrollBy({ top: step, behavior: "smooth" });
+          target.scrollTop = Math.min(maxScroll, target.scrollTop + (speed * delta) / 1000);
         }
-      }, interval);
-    }, 650);
 
-    return () => {
-      window.clearTimeout(startTimer);
-      if (scrollTimer !== null) window.clearInterval(scrollTimer);
-    };
-  }, [activeKey, interval, step]);
+        frameRef.current = window.requestAnimationFrame(tick);
+      };
 
-  return ref;
+      frameRef.current = window.requestAnimationFrame(tick);
+    }, startDelay);
+
+    return stopAutoScroll;
+  }, [activeKey, speed, startDelay, stopAutoScroll]);
+
+  return { ref, stopAutoScroll };
 };
 
 const AnimatedTitle = ({ text, className, delay = 0 }: { text: string, className: string, delay?: number }) => (
@@ -409,7 +439,7 @@ const ProjectsSection = () => {
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const mobileProjectScrollRef = useRef<HTMLDivElement>(null);
   const projectAutoPreviewRef = useRef(false);
-  const projectDetailScrollRef = useAutoScrollOverflow(selectedProject, 1500, 28);
+  const { ref: projectDetailScrollRef, stopAutoScroll: stopProjectDetailAutoScroll } = useAutoScrollOverflow(selectedProject, 42);
   const [isProjectsInView, setIsProjectsInView] = useState(false);
   const projectModalSections = ["项目背景", "我的角色", "核心价值"];
 
@@ -714,9 +744,9 @@ const ProjectsSection = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.28, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full md:max-w-3xl max-h-[calc(100dvh-2rem-env(safe-area-inset-bottom))] md:max-h-[74%] rounded-[2rem] md:rounded-3xl bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 md:p-8 overflow-hidden"
+            className="w-full md:max-w-3xl h-[60dvh] md:h-auto max-h-[60dvh] md:max-h-[74%] rounded-[2rem] md:rounded-3xl bg-zinc-900 ring-1 ring-inset ring-zinc-800 shadow-2xl p-6 md:p-8 overflow-hidden flex flex-col"
           >
-            <div className="flex items-start justify-between gap-4 mb-5">
+            <div className="flex items-start justify-between gap-4 mb-5 shrink-0">
               <div className="min-w-0">
                 <span className="inline-flex px-3 py-1 rounded-full bg-zinc-950 border border-zinc-800 text-zinc-400 text-xs font-mono mb-3">
                   {projects[selectedProject].type} · {projects[selectedProject].scale}
@@ -740,9 +770,15 @@ const ProjectsSection = () => {
 
             <div
               ref={projectDetailScrollRef}
-              onWheel={(e) => e.stopPropagation()}
-              onTouchMove={(e) => e.stopPropagation()}
-              className="max-h-[calc(100dvh-206px-env(safe-area-inset-bottom))] md:max-h-[calc(74vh-210px)] overflow-y-auto overscroll-contain hide-scrollbar pr-1 [mask-image:linear-gradient(to_bottom,black_97%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_97%,transparent_100%)]"
+              onWheel={(e) => {
+                stopProjectDetailAutoScroll();
+                e.stopPropagation();
+              }}
+              onTouchMove={(e) => {
+                stopProjectDetailAutoScroll();
+                e.stopPropagation();
+              }}
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain hide-scrollbar pr-1 pb-7 [mask-image:linear-gradient(to_bottom,black_0%,black_86%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_0%,black_86%,transparent_100%)] md:max-h-[calc(74vh-210px)]"
             >
               <div className="space-y-5 text-zinc-300">
                 {projectModalSections.map((sectionTitle) => {
@@ -776,7 +812,7 @@ const ExperienceSection = () => {
   const experienceAutoPreviewRef = useRef(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeExperience, setActiveExperience] = useState<number | null>(null);
-  const mobileExperienceDetailRef = useAutoScrollOverflow(activeExperience, 1500, 26);
+  const { ref: mobileExperienceDetailRef, stopAutoScroll: stopMobileExperienceAutoScroll } = useAutoScrollOverflow(activeExperience, 34);
   const [isMobileExperienceScrolled, setIsMobileExperienceScrolled] = useState(false);
   const [isExperienceInView, setIsExperienceInView] = useState(false);
 
@@ -784,7 +820,7 @@ const ExperienceSection = () => {
     {
       period: "2024.07 - 2026.06",
       company: "深圳益邦阳光有限公司",
-      role: "数据组长 / AI训练师",
+      role: "数据组长",
       tags: ["Agent轨迹", "RAG+SFT", "多模态", "团队管理"],
       details: [
         "入职初期以标注员身份参与对外图片理解项目，因质量表现与规则贡献于2025.06晋升数据组长，统筹8人执行团队。",
@@ -796,7 +832,7 @@ const ExperienceSection = () => {
     {
       period: "2023.04 - 2024.06",
       company: "行吟信息科技（上海）有限公司（小红书）",
-      role: "图文内容标注 / 质检专员",
+      role: "标注员 / 质检员",
       tags: ["图文理解", "标签体系", "抽检返修", "错误归因"],
       details: [
         "负责图文笔记多维度标注，综合封面图、图片组、标题、正文和话题标签，完成内容类目、主题标签、内容意图、场景标签、图文一致性、低质风险等字段标注。",
@@ -1077,8 +1113,14 @@ const ExperienceSection = () => {
             </div>
             <div
               ref={mobileExperienceDetailRef}
-              onWheel={(e) => e.stopPropagation()}
-              onTouchMove={(e) => e.stopPropagation()}
+              onWheel={(e) => {
+                stopMobileExperienceAutoScroll();
+                e.stopPropagation();
+              }}
+              onTouchMove={(e) => {
+                stopMobileExperienceAutoScroll();
+                e.stopPropagation();
+              }}
               className="max-h-[calc(100dvh-170px-env(safe-area-inset-bottom))] overflow-y-auto overscroll-contain hide-scrollbar pr-1 [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_bottom,black_94%,transparent_100%)]"
             >
               <ul className="space-y-4 text-zinc-300">
