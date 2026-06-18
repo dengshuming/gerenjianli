@@ -493,6 +493,7 @@ const ProjectsSection = () => {
       title: "售后客服智能体轨迹",
       type: "Agent 数据",
       scale: "8500条 / 2026.03-至今",
+      period: "2026.03-至今",
       desc: "围绕售后智能体工具调用轨迹，建设逐轮思考、工具选择、参数完整性和事实一致性质检标准。",
       tags: ["轨迹质检", "工具调用", "格式预检", "团队分工"],
       detailSections: [
@@ -506,6 +507,7 @@ const ProjectsSection = () => {
       title: "海外客户PO采购单识别",
       type: "多模态识别",
       scale: "4000份 / 2026.01-2026.02",
+      period: "2026.01-2026.02",
       desc: "针对海外客户PO图片与PDF，建设字段抽取、完整性判断和OA录入前置审核数据。",
       tags: ["字段抽取", "双人标注", "高风险核查", "评测分析"],
       detailSections: [
@@ -519,6 +521,7 @@ const ProjectsSection = () => {
       title: "APP智能客服RAG+SFT",
       type: "RAG + SFT",
       scale: "1.4W条 / 2025.09-2025.12",
+      period: "2025.09-2025.12",
       desc: "围绕储能APP售后知识库、RAG检索与SFT问答样本，提升高频售后场景自动应答能力。",
       tags: ["知识入库", "术语映射", "Dify提效", "评测集"],
       detailSections: [
@@ -532,6 +535,7 @@ const ProjectsSection = () => {
       title: "客服消息意图分类",
       type: "文本分类",
       scale: "1.6W条 / 2025.06-2025.08",
+      period: "2025.06-2025.08",
       desc: "从零建立售前咨询、售后服务、闲聊三类意图体系，支撑客服消息自动分流。",
       tags: ["三分类体系", "数据清洗", "任务管理", "分流验证"],
       detailSections: [
@@ -545,6 +549,7 @@ const ProjectsSection = () => {
       title: "泛电商多模态图片理解",
       type: "图片理解",
       scale: "2W张 / 2024.07-2025.05",
+      period: "2024.07-2025.05",
       desc: "参与对外图片理解数据项目，围绕商品主图、海报、场景图、细节图和信息图进行多维标签与结构化描述。",
       tags: ["多维标签", "结构化描述", "规则贡献", "抽检合格率97%"],
       detailSections: [
@@ -558,6 +563,7 @@ const ProjectsSection = () => {
       title: "小红书图文笔记标签体系",
       type: "图文内容理解",
       scale: "30万条 / 2023.04-2024.06",
+      period: "2023.04-2024.06",
       desc: "参与小红书图文笔记标签体系优化，覆盖内容类目、主题标签、内容意图、图文一致性和低质风险等字段。",
       tags: ["标签体系", "图文一致性", "低质风险", "质检返修"],
       detailSections: [
@@ -749,7 +755,7 @@ const ProjectsSection = () => {
             <div className="flex items-start justify-between gap-4 mb-5 shrink-0">
               <div className="min-w-0">
                 <span className="inline-flex px-3 py-1 rounded-full bg-zinc-950 border border-zinc-800 text-zinc-400 text-xs font-mono mb-3">
-                  {projects[selectedProject].type} · {projects[selectedProject].scale}
+                  {projects[selectedProject].period}
                 </span>
                 <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight mb-2">
                   {projects[selectedProject].title}
